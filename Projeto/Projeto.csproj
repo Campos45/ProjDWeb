@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>aspnet-WebApplication1-c9ea333e-4378-4e64-bb1b-38661074ac91</UserSecretsId>
+        <RootNamespace>WebApplication1</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
