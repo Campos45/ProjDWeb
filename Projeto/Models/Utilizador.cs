@@ -31,4 +31,6 @@ public class Utilizador
     public string Email { get; set; }
 
     public ICollection<Monumento> Monumentos { get; set; } = new List<Monumento>();
+    
+    public ICollection<Comentario> Comentario { get; set; } = new List<Comentario>();
 }
