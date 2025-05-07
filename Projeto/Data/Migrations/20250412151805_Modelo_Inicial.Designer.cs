@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Data;
 
@@ -10,27 +11,14 @@ using WebApplication1.Data;
 namespace WebApplication1.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250412151805_Modelo_Inicial")]
+    partial class Modelo_Inicial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.13");
-
-            modelBuilder.Entity("CaracteristicasMonumento", b =>
-                {
-                    b.Property<int>("CaracteristicasId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MonumentosId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("CaracteristicasId", "MonumentosId");
-
-                    b.HasIndex("MonumentosId");
-
-                    b.ToTable("CaracteristicasMonumento");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -228,179 +216,6 @@ namespace WebApplication1.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("appMonumentos.Models.Caracteristicas", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ClassPatrimonial")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Estilo")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Tipo")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Caracteristicas");
-                });
-
-            modelBuilder.Entity("appMonumentos.Models.Comentario", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ComentarioTexto")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("Data")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("ImagemId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("UtilizadorId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ImagemId");
-
-                    b.HasIndex("UtilizadorId");
-
-                    b.ToTable("Comentario");
-                });
-
-            modelBuilder.Entity("appMonumentos.Models.Imagem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MonumentoId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("NomeImagem")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MonumentoId");
-
-                    b.ToTable("Imagem");
-                });
-
-            modelBuilder.Entity("appMonumentos.Models.Localidade", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("NomeLocalidade")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Localidade");
-                });
-
-            modelBuilder.Entity("appMonumentos.Models.Monumento", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Coordenadas")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Designacao")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Endereco")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("EpocaConstrucao")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("LocalidadeId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("UtilizadorId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LocalidadeId");
-
-                    b.HasIndex("UtilizadorId");
-
-                    b.ToTable("Monumento");
-                });
-
-            modelBuilder.Entity("appMonumentos.Models.Utilizador", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("LocalidadeUtilizador")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Utilizador");
-                });
-
-            modelBuilder.Entity("CaracteristicasMonumento", b =>
-                {
-                    b.HasOne("appMonumentos.Models.Caracteristicas", null)
-                        .WithMany()
-                        .HasForeignKey("CaracteristicasId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("appMonumentos.Models.Monumento", null)
-                        .WithMany()
-                        .HasForeignKey("MonumentosId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -450,73 +265,6 @@ namespace WebApplication1.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("appMonumentos.Models.Comentario", b =>
-                {
-                    b.HasOne("appMonumentos.Models.Imagem", "Imagem")
-                        .WithMany("Comentarios")
-                        .HasForeignKey("ImagemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("appMonumentos.Models.Utilizador", null)
-                        .WithMany("Comentario")
-                        .HasForeignKey("UtilizadorId");
-
-                    b.Navigation("Imagem");
-                });
-
-            modelBuilder.Entity("appMonumentos.Models.Imagem", b =>
-                {
-                    b.HasOne("appMonumentos.Models.Monumento", "Monumento")
-                        .WithMany("Imagens")
-                        .HasForeignKey("MonumentoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Monumento");
-                });
-
-            modelBuilder.Entity("appMonumentos.Models.Monumento", b =>
-                {
-                    b.HasOne("appMonumentos.Models.Localidade", "Localidade")
-                        .WithMany("Monumentos")
-                        .HasForeignKey("LocalidadeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("appMonumentos.Models.Utilizador", "Utilizador")
-                        .WithMany("Monumentos")
-                        .HasForeignKey("UtilizadorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Localidade");
-
-                    b.Navigation("Utilizador");
-                });
-
-            modelBuilder.Entity("appMonumentos.Models.Imagem", b =>
-                {
-                    b.Navigation("Comentarios");
-                });
-
-            modelBuilder.Entity("appMonumentos.Models.Localidade", b =>
-                {
-                    b.Navigation("Monumentos");
-                });
-
-            modelBuilder.Entity("appMonumentos.Models.Monumento", b =>
-                {
-                    b.Navigation("Imagens");
-                });
-
-            modelBuilder.Entity("appMonumentos.Models.Utilizador", b =>
-                {
-                    b.Navigation("Comentario");
-
-                    b.Navigation("Monumentos");
                 });
 #pragma warning restore 612, 618
         }
