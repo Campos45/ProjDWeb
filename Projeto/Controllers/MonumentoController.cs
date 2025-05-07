@@ -49,8 +49,8 @@ namespace WebApplication1.Controllers
         // GET: Monumento/Create
         public IActionResult Create()
         {
-            ViewData["LocalidadeId"] = new SelectList(_context.Set<Localidade>(), "Id", "Id");
-            ViewData["UtilizadorId"] = new SelectList(_context.Set<Utilizador>(), "Id", "Nome");
+            ViewData["LocalidadeId"] = new SelectList(_context.Localidade, "Id", "NomeLocalidade");
+            ViewData["UtilizadorId"] = new SelectList(_context.Utilizador, "Id", "Nome");
             return View();
         }
 

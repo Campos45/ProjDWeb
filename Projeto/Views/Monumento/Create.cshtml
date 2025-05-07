@@ -39,12 +39,20 @@
             </div>
             <div class="form-group">
                 <label asp-for="UtilizadorId" class="control-label"></label>
-                <select asp-for="UtilizadorId" class ="form-control" asp-items="ViewBag.UtilizadorId"></select>
+                <select asp-for="UtilizadorId" class="form-control" asp-items="ViewBag.UtilizadorId">
+                    <option value="">Selecione um utilizador</option>
+                </select>
+                <span asp-validation-for="UtilizadorId" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="LocalidadeId" class="control-label"></label>
-                <select asp-for="LocalidadeId" class ="form-control" asp-items="ViewBag.LocalidadeId"></select>
+                <select asp-for="LocalidadeId" class="form-control" asp-items="ViewBag.LocalidadeId">
+                    <option value="">Selecione uma localidade</option>
+                </select>
+                <span asp-validation-for="LocalidadeId" class="text-danger"></span>
             </div>
+            
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -58,4 +66,7 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @Html.ValidationSummary()//mostrar erros
+    <p>Valor de UtilizadorId: @Model?.UtilizadorId</p>
+    <p>Valor de LocalidadeId: @Model?.LocalidadeId</p>
 }
