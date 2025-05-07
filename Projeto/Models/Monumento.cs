@@ -24,11 +24,15 @@ public class Monumento
     public string Descricao { get; set; }
 
     // Relações
+    [Required(ErrorMessage = "O campo Utilizador é obrigatório.")]
+    [Display(Name = "Utilizador")]
     public int UtilizadorId { get; set; }
-    public Utilizador Utilizador { get; set; }
+    public Utilizador? Utilizador { get; set; }
 
+    [Required(ErrorMessage = "O campo Localidade é obrigatório.")]
+    [Display(Name = "Localidade")]
     public int LocalidadeId { get; set; }
-    public Localidade Localidade { get; set; }
+    public Localidade? Localidade { get; set; }
 
     public ICollection<Imagem> Imagens { get; set; } = new List<Imagem>();
 
