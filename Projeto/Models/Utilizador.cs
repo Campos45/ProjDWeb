@@ -21,8 +21,10 @@ public class Utilizador
 
     [Display(Name = "Nome do utilizador")]
     [Required]
+    [RegularExpression("^[A-Za-z]+$", ErrorMessage = "Utilize apenas letras maiúsculas e minúsculas.")]
     public string Nome { get; set; }
 
+    [RegularExpression("^[A-Za-z]+$", ErrorMessage = "Utilize apenas letras maiúsculas e minúsculas.")]
     [Display(Name = "Localidade do Utilizador")]
     public string LocalidadeUtilizador { get; set; }
 
