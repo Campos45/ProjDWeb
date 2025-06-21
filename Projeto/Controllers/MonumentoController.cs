@@ -11,6 +11,7 @@ using WebApplication1.Data;
 using appMonumentos.Models;
 using Microsoft.AspNetCore.Hosting;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication1.Controllers
 {
@@ -42,8 +43,12 @@ namespace WebApplication1.Controllers
 
             var monumento = await _context.Monumento
                 .Include(m => m.Localidade)
-                .Include(m => m.Utilizador)
+                .Include(m => m.Utilizador) // criador do monumento
                 .Include(m => m.Imagens)
+                .ThenInclude(i => i.Comentarios)
+                .ThenInclude(c => c.Utilizador) // incluir quem comentou
+                .Include(m => m.VisitasMonumento)
+                .ThenInclude(v => v.Utilizador) // incluir quem visitou
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (monumento == null)
@@ -53,6 +58,8 @@ namespace WebApplication1.Controllers
 
             return View(monumento);
         }
+
+
 
         // GET: Monumento/Create
         public IActionResult Create()
@@ -230,6 +237,38 @@ namespace WebApplication1.Controllers
 
             return RedirectToAction("Details", new { id = monumentoId });
         }
+        
+        
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> ToggleVisita(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var utilizador = await _context.Utilizador.FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
+
+            if (utilizador == null)
+                return Unauthorized();
+
+            var visitaExistente = await _context.VisitaMonumento
+                .FirstOrDefaultAsync(v => v.MonumentoId == id && v.UtilizadorId == utilizador.Id);
+
+            if (visitaExistente != null)
+            {
+                _context.VisitaMonumento.Remove(visitaExistente); // Desmarca visita
+            }
+            else
+            {
+                _context.VisitaMonumento.Add(new VisitaMonumento
+                {
+                    MonumentoId = id,
+                    UtilizadorId = utilizador.Id
+                });
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Details", new { id });
+        }
+
 
     }
 }

@@ -1,0 +1,9 @@
+@model List<string>
+
+<h4>Utilizadores que visitaram este monumento:</h4>
+<ul>
+    @foreach (var nome in Model)
+    {
+        <li>@nome</li>
+    }
+</ul>

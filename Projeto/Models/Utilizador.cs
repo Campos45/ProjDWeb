@@ -35,4 +35,7 @@ public class Utilizador
     public ICollection<Monumento> Monumentos { get; set; } = new List<Monumento>();
     
     public ICollection<Comentario> Comentario { get; set; } = new List<Comentario>();
+    
+    public List<VisitaMonumento> VisitasAosMonumentos { get; set; } = new List<VisitaMonumento>();
+
 }

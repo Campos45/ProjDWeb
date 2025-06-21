@@ -9,6 +9,10 @@
     var imagensSecundarias = Model.Imagens?.Where(i => !i.IsPrincipal).ToList() ?? new List<appMonumentos.Models.Imagem>();
 
     var userAuthenticated = User.Identity != null && User.Identity.IsAuthenticated;
+    var currentUsername = User.Identity.Name;
+    
+    var utilizadorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var utilizadorVisitou = Model.VisitasMonumento.Any(v => v.Utilizador.Username == User.Identity.Name);
 }
 
 <h2>@Model.Designacao</h2>
@@ -24,11 +28,51 @@
 }
 
 <!-- Imagem Principal -->
-<div>
+<div style="margin-bottom: 30px;">
     <h4>Imagem Principal:</h4>
     @if (imagemPrincipal != null)
     {
         <img src="~/imagens/@imagemPrincipal.NomeImagem" alt="Imagem Principal" width="400" />
+
+        <!-- Comentários -->
+        <h5>Comentários:</h5>
+        @if (imagemPrincipal.Comentarios != null && imagemPrincipal.Comentarios.Any())
+        {
+            <ul>
+                @foreach (var comentario in imagemPrincipal.Comentarios.OrderByDescending(c => c.Data))
+                {
+                    <li>
+                        <strong>
+                            @comentario.Utilizador?.Username
+                            @(comentario.Utilizador?.Id == Model.Utilizador?.Id ? " (criador deste monumento)" : "")
+                        </strong>: @comentario.ComentarioTexto
+                        <br />
+                        <small>@comentario.Data.ToString("dd/MM/yyyy HH:mm")</small>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p><i>Sem comentários.</i></p>
+        }
+
+        <!-- Formulário para novo comentário -->
+        @if (userAuthenticated)
+        {
+            <form asp-controller="Comentario" asp-action="Criar" method="post">
+                <input type="hidden" name="ImagemId" value="@imagemPrincipal.Id" />
+                <div class="form-group">
+                    <label for="ComentarioTexto">Comentário:</label>
+                    <textarea name="ComentarioTexto" class="form-control" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Submeter Comentário</button>
+            </form>
+        }
+        else
+        {
+            <p><i>Inicie sessão para comentar esta imagem.</i></p>
+        }
     }
     else
     {
@@ -38,7 +82,7 @@
     }
 </div>
 
-<!-- Upload de Imagem (apenas para utilizadores autenticados) -->
+<!-- Upload de Imagem -->
 @if (userAuthenticated)
 {
     <h4>Enviar nova imagem:</h4>
@@ -60,7 +104,86 @@ else
     <div>
         @foreach (var img in imagensSecundarias)
         {
-            <img src="~/imagens/@img.NomeImagem" alt="Imagem Secundária" width="150" style="margin: 5px;" />
+            <div style="margin-bottom: 20px; border: 1px solid #ccc; padding: 10px;">
+                <img src="~/imagens/@img.NomeImagem" alt="Imagem Secundária" width="300" />
+
+                <!-- Comentários -->
+                <h5>Comentários:</h5>
+                @if (img.Comentarios != null && img.Comentarios.Any())
+                {
+                    <ul>
+                        @foreach (var comentario in img.Comentarios.OrderByDescending(c => c.Data))
+                        {
+                            <li>
+                                <strong>
+                                    @comentario.Utilizador?.Username
+                                    @(comentario.Utilizador?.Id == Model.Utilizador?.Id ? " (criador deste monumento)" : "")
+                                </strong>: @comentario.ComentarioTexto
+                                <br />
+                                <small>@comentario.Data.ToString("dd/MM/yyyy HH:mm")</small>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p><i>Sem comentários.</i></p>
+                }
+
+                <!-- Formulário para novo comentário -->
+                @if (userAuthenticated)
+                {
+                    <form asp-controller="Comentario" asp-action="Criar" method="post">
+                        <input type="hidden" name="ImagemId" value="@img.Id" />
+                        <div class="form-group">
+                            <label for="ComentarioTexto">Comentário:</label>
+                            <textarea name="ComentarioTexto" class="form-control" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-2">Submeter Comentário</button>
+                    </form>
+                }
+                else
+                {
+                    <p><i>Inicie sessão para comentar esta imagem.</i></p>
+                }
+            </div>
         }
     </div>
+}
+
+<!-- Marcar como Visitado e Mostrar Lista -->
+@if (userAuthenticated)
+{
+    <form asp-action="ToggleVisita" asp-controller="Monumento" method="post" style="margin-top: 15px;">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit" class="btn @(utilizadorVisitou ? "btn-success" : "btn-outline-secondary")">
+            @(utilizadorVisitou ? "✓ Já Visitaste (clique para remover)" : "Marcar como Visitado")
+        </button>
+    </form>
+
+    <button class="btn btn-info mt-2" type="button" onclick="toggleListaVisitantes()">Mostrar/Esconder Lista de Visitantes</button>
+
+    <div id="listaVisitantes" class="mt-2" style="display: none;">
+        <h5>Utilizadores que visitaram:</h5>
+        @if (Model.VisitasMonumento.Any())
+        {
+            <ul>
+                @foreach (var visita in Model.VisitasMonumento)
+                {
+                    <li>@visita.Utilizador.Nome</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p><i>Ainda ninguém marcou como visitado.</i></p>
+        }
+    </div>
+
+    <script>
+        function toggleListaVisitantes() {
+            const div = document.getElementById("listaVisitantes");
+            div.style.display = (div.style.display === "none") ? "block" : "none";
+        }
+    </script>
 }

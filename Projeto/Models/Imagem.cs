@@ -19,4 +19,7 @@ public class Imagem
     public Utilizador Utilizador { get; set; }
 
     public bool IsPrincipal { get; set; } = false;
+    
+    public ICollection<Comentario> Comentarios { get; set; } = new List<Comentario>();
+
 }

@@ -19,4 +19,7 @@ public DbSet<appMonumentos.Models.Localidade> Localidade { get; set; } = default
 
 public DbSet<appMonumentos.Models.Imagem> Imagem { get; set; }
 
+public DbSet<VisitaMonumento> VisitaMonumento { get; set; }
+
+
 }
