@@ -1,22 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using appMonumentos.Models;
+using Microsoft.AspNetCore.Hosting;
+using System.Security.Claims;
 
 namespace WebApplication1.Controllers
 {
     public class MonumentoController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public MonumentoController(ApplicationDbContext context)
+        public MonumentoController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: Monumento
@@ -37,7 +43,9 @@ namespace WebApplication1.Controllers
             var monumento = await _context.Monumento
                 .Include(m => m.Localidade)
                 .Include(m => m.Utilizador)
+                .Include(m => m.Imagens)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (monumento == null)
             {
                 return NotFound();
@@ -55,8 +63,6 @@ namespace WebApplication1.Controllers
         }
 
         // POST: Monumento/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Designacao,Endereco,Coordenadas,EpocaConstrucao,Descricao,UtilizadorId,LocalidadeId")] Monumento monumento)
@@ -91,8 +97,6 @@ namespace WebApplication1.Controllers
         }
 
         // POST: Monumento/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Designacao,Endereco,Coordenadas,EpocaConstrucao,Descricao,UtilizadorId,LocalidadeId")] Monumento monumento)
@@ -166,5 +170,66 @@ namespace WebApplication1.Controllers
         {
             return _context.Monumento.Any(e => e.Id == id);
         }
+
+        // POST: UploadImagem
+        [HttpPost]
+        public async Task<IActionResult> UploadImagem(int monumentoId, IFormFile imagem)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                TempData["Erro"] = "Precisas de estar autenticado para enviar imagens.";
+                return RedirectToAction("Details", new { id = monumentoId });
+            }
+
+            // Obter o utilizador autenticado a partir do Username (não Email!)
+            var utilizador = await _context.Utilizador
+                .FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
+
+            if (utilizador == null)
+            {
+                TempData["Erro"] = "Utilizador não encontrado na base de dados.";
+                return RedirectToAction("Details", new { id = monumentoId });
+            }
+
+            if (imagem == null || imagem.Length == 0)
+            {
+                TempData["Erro"] = "Imagem inválida.";
+                return RedirectToAction("Details", new { id = monumentoId });
+            }
+
+            var monumento = await _context.Monumento
+                .Include(m => m.Imagens)
+                .FirstOrDefaultAsync(m => m.Id == monumentoId);
+
+            if (monumento == null)
+            {
+                return NotFound();
+            }
+
+            // Guardar o ficheiro no sistema
+            var nomeImagem = Guid.NewGuid().ToString() + Path.GetExtension(imagem.FileName);
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/imagens", nomeImagem);
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await imagem.CopyToAsync(stream);
+            }
+
+            // Verifica se é o criador E se ainda não há imagem principal
+            bool isPrincipal = monumento.UtilizadorId == utilizador.Id && !monumento.Imagens.Any(i => i.IsPrincipal);
+
+            var novaImagem = new Imagem
+            {
+                NomeImagem = nomeImagem,
+                MonumentoId = monumentoId,
+                UtilizadorId = utilizador.Id,
+                IsPrincipal = isPrincipal
+            };
+
+            _context.Imagem.Add(novaImagem);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = monumentoId });
+        }
+
     }
 }

@@ -11,8 +11,10 @@
   <component name="ChangeListManager">
     <list default="true" id="14e42af0-b416-4e94-a6b6-58f49122598b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/Monumento/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Monumento/Index.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Shared/_Layout.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/MonumentoController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/MonumentoController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data/ApplicationDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/ApplicationDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Imagem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Imagem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Monumento/Details.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Monumento/Details.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/app.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.db-shm" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app.db-wal" beforeDir="false" />
@@ -50,6 +52,9 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="mock://C:/Users/Martim/RiderProjects/ProjDWeb/Projeto/Views/Shared/_Layout.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Martim/RiderProjects/ProjDWeb/Projeto/Views/Shared/_Layout.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Martim/RiderProjects/ProjDWeb/Projeto/Views/Shared/_LoginPartial.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Views/Utilizador/Login.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
@@ -140,6 +145,8 @@
       <workItem from="1746616454175" duration="6825000" />
       <workItem from="1747738925570" duration="5359000" />
       <workItem from="1749029067789" duration="4354000" />
+      <workItem from="1750255402168" duration="4577000" />
+      <workItem from="1750430387457" duration="5624000" />
     </task>
     <task id="LOCAL-00001" summary="criar monumentos updated v2">
       <option name="closed" value="true" />
@@ -165,7 +172,15 @@
       <option name="project" value="LOCAL" />
       <updated>1749031218313</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="editar acesso ao edit/delete/create/details nos monumentos consoante o tipo de user">
+      <option name="closed" value="true" />
+      <created>1749038356148</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1749038356148</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -178,6 +193,7 @@
     <MESSAGE value="criar monumentos updated v2" />
     <MESSAGE value="merge monumento to main" />
     <MESSAGE value="adicionar botoes para alternar entre controllers" />
-    <option name="LAST_COMMIT_MESSAGE" value="" />
+    <MESSAGE value="editar acesso ao edit/delete/create/details nos monumentos consoante o tipo de user" />
+    <option name="LAST_COMMIT_MESSAGE" value="editar acesso ao edit/delete/create/details nos monumentos consoante o tipo de user" />
   </component>
 </project>

@@ -16,4 +16,7 @@ public DbSet<appMonumentos.Models.Monumento> Monumento { get; set; } = default!;
 public DbSet<appMonumentos.Models.Utilizador> Utilizador { get; set; } = default!;
 
 public DbSet<appMonumentos.Models.Localidade> Localidade { get; set; } = default!;
+
+public DbSet<appMonumentos.Models.Imagem> Imagem { get; set; }
+
 }

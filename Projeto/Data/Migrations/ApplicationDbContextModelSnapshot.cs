@@ -285,6 +285,9 @@ namespace WebApplication1.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("IsPrincipal")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("MonumentoId")
                         .HasColumnType("INTEGER");
 
@@ -292,9 +295,14 @@ namespace WebApplication1.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("UtilizadorId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("MonumentoId");
+
+                    b.HasIndex("UtilizadorId");
 
                     b.ToTable("Imagem");
                 });
@@ -455,7 +463,7 @@ namespace WebApplication1.Data.Migrations
             modelBuilder.Entity("appMonumentos.Models.Comentario", b =>
                 {
                     b.HasOne("appMonumentos.Models.Imagem", "Imagem")
-                        .WithMany("Comentarios")
+                        .WithMany()
                         .HasForeignKey("ImagemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -475,7 +483,15 @@ namespace WebApplication1.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("appMonumentos.Models.Utilizador", "Utilizador")
+                        .WithMany()
+                        .HasForeignKey("UtilizadorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Monumento");
+
+                    b.Navigation("Utilizador");
                 });
 
             modelBuilder.Entity("appMonumentos.Models.Monumento", b =>
@@ -495,11 +511,6 @@ namespace WebApplication1.Data.Migrations
                     b.Navigation("Localidade");
 
                     b.Navigation("Utilizador");
-                });
-
-            modelBuilder.Entity("appMonumentos.Models.Imagem", b =>
-                {
-                    b.Navigation("Comentarios");
                 });
 
             modelBuilder.Entity("appMonumentos.Models.Localidade", b =>

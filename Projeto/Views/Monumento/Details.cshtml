@@ -1,60 +1,66 @@
 ﻿@model appMonumentos.Models.Monumento
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalhes do Monumento";
+
+    var imagemPrincipal = Model.Imagens?.FirstOrDefault(i => i.IsPrincipal);
+    var imagensSecundarias = Model.Imagens?.Where(i => !i.IsPrincipal).ToList() ?? new List<appMonumentos.Models.Imagem>();
+
+    var userAuthenticated = User.Identity != null && User.Identity.IsAuthenticated;
 }
 
-<h1>Details</h1>
+<h2>@Model.Designacao</h2>
 
+<!-- Mensagens de sucesso ou erro -->
+@if (TempData["Erro"] != null)
+{
+    <div style="color: red; font-weight: bold;">@TempData["Erro"]</div>
+}
+@if (TempData["Sucesso"] != null)
+{
+    <div style="color: green; font-weight: bold;">@TempData["Sucesso"]</div>
+}
+
+<!-- Imagem Principal -->
 <div>
-    <h4>Monumento</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Designacao)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Designacao)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Endereco)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Endereco)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Coordenadas)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Coordenadas)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EpocaConstrucao)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EpocaConstrucao)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Descricao)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Descricao)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Utilizador)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Utilizador.Nome)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Localidade)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Localidade.Id)
-        </dd>
-    </dl>
+    <h4>Imagem Principal:</h4>
+    @if (imagemPrincipal != null)
+    {
+        <img src="~/imagens/@imagemPrincipal.NomeImagem" alt="Imagem Principal" width="400" />
+    }
+    else
+    {
+        <div style="width:400px; height:250px; background-color:lightgray; text-align:center; line-height:250px;">
+            Sem imagem principal
+        </div>
+    }
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+<!-- Upload de Imagem (apenas para utilizadores autenticados) -->
+@if (userAuthenticated)
+{
+    <h4>Enviar nova imagem:</h4>
+    <form asp-action="UploadImagem" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="monumentoId" value="@Model.Id" />
+        <input type="file" name="imagem" required />
+        <button type="submit">Enviar Imagem</button>
+    </form>
+}
+else
+{
+    <p><i>Inicie sessão para enviar imagens.</i></p>
+}
+
+<!-- Imagens Secundárias -->
+@if (imagensSecundarias.Any())
+{
+    <h4>Imagens dos Utilizadores:</h4>
+    <div>
+        @foreach (var img in imagensSecundarias)
+        {
+            <img src="~/imagens/@img.NomeImagem" alt="Imagem Secundária" width="150" style="margin: 5px;" />
+        }
+    </div>
+}
