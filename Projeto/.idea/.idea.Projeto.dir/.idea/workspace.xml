@@ -10,22 +10,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="14e42af0-b416-4e94-a6b6-58f49122598b" name="Changes" comment="upload de imagens">
-      <change afterPath="$PROJECT_DIR$/Controllers/ComentarioController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Controllers/VisitaController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Models/VisitaMonumento.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Views/Visita/_ListaVisitantesPartial.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/ComentarioController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/ComentarioController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controllers/MonumentoController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/MonumentoController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/UtilizadorController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/UtilizadorController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/VisitaController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/VisitaController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Data/ApplicationDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/ApplicationDbContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Models/Comentario.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Comentario.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Imagem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Imagem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Monumento.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Monumento.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Utilizador.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Utilizador.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Views/Monumento/Details.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Monumento/Details.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Shared/_Layout.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Utilizador/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Utilizador/Index.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/app.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.db-shm" beforeDir="false" afterPath="$PROJECT_DIR$/app.db-shm" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.db-wal" beforeDir="false" afterPath="$PROJECT_DIR$/app.db-wal" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.db-shm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.db-wal" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wwwroot/imagens/a444c1e6-11a5-4b8a-b1dd-c7f9eae7dcd7.webp" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

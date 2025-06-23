@@ -10,14 +10,15 @@
 
     var userAuthenticated = User.Identity != null && User.Identity.IsAuthenticated;
     var currentUsername = User.Identity.Name;
-    
+
     var utilizadorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var isAdmin = User.IsInRole("Admin");
     var utilizadorVisitou = Model.VisitasMonumento.Any(v => v.Utilizador.Username == User.Identity.Name);
 }
 
 <h2>@Model.Designacao</h2>
 
-<!-- Mensagens de sucesso ou erro -->
+<!-- Mensagens -->
 @if (TempData["Erro"] != null)
 {
     <div style="color: red; font-weight: bold;">@TempData["Erro"]</div>
@@ -34,8 +35,16 @@
     {
         <img src="~/imagens/@imagemPrincipal.NomeImagem" alt="Imagem Principal" width="400" />
 
+        <!-- Botão de apagar imagem -->
+        @if (userAuthenticated && (imagemPrincipal.Utilizador?.Username == currentUsername || isAdmin))
+        {
+            <form asp-controller="Monumento" asp-action="DeleteImagem" method="post" asp-route-id="@imagemPrincipal.Id" onsubmit="return confirm('Tem a certeza que quer apagar esta imagem?');">
+                <button type="submit" class="btn btn-danger btn-sm mt-2">Apagar imagem</button>
+            </form>
+        }
+
         <!-- Comentários -->
-        <h5>Comentários:</h5>
+        <h5 class="mt-3">Comentários:</h5>
         @if (imagemPrincipal.Comentarios != null && imagemPrincipal.Comentarios.Any())
         {
             <ul>
@@ -48,6 +57,13 @@
                         </strong>: @comentario.ComentarioTexto
                         <br />
                         <small>@comentario.Data.ToString("dd/MM/yyyy HH:mm")</small>
+
+                        @if (userAuthenticated && (comentario.Utilizador?.Username == currentUsername || isAdmin))
+                        {
+                            <form asp-controller="Comentario" asp-action="Delete" method="post" asp-route-id="@comentario.Id" class="d-inline">
+                                <button type="submit" class="btn btn-danger btn-sm mt-1">Apagar comentário</button>
+                            </form>
+                        }
                     </li>
                 }
             </ul>
@@ -86,6 +102,12 @@
 @if (userAuthenticated)
 {
     <h4>Enviar nova imagem:</h4>
+
+    @if (Model.Utilizador?.Username == currentUsername && imagemPrincipal == null)
+    {
+        <p><i>Como criador, esta imagem será marcada como principal.</i></p>
+    }
+
     <form asp-action="UploadImagem" method="post" enctype="multipart/form-data">
         <input type="hidden" name="monumentoId" value="@Model.Id" />
         <input type="file" name="imagem" required />
@@ -107,8 +129,16 @@ else
             <div style="margin-bottom: 20px; border: 1px solid #ccc; padding: 10px;">
                 <img src="~/imagens/@img.NomeImagem" alt="Imagem Secundária" width="300" />
 
+                <!-- Botão de apagar imagem -->
+                @if (userAuthenticated && (img.Utilizador?.Username == currentUsername || isAdmin))
+                {
+                    <form asp-controller="Monumento" asp-action="DeleteImagem" method="post" asp-route-id="@img.Id" onsubmit="return confirm('Tem a certeza que quer apagar esta imagem?');">
+                        <button type="submit" class="btn btn-danger btn-sm mt-2">Apagar imagem</button>
+                    </form>
+                }
+
                 <!-- Comentários -->
-                <h5>Comentários:</h5>
+                <h5 class="mt-3">Comentários:</h5>
                 @if (img.Comentarios != null && img.Comentarios.Any())
                 {
                     <ul>
@@ -121,6 +151,13 @@ else
                                 </strong>: @comentario.ComentarioTexto
                                 <br />
                                 <small>@comentario.Data.ToString("dd/MM/yyyy HH:mm")</small>
+
+                                @if (userAuthenticated && (comentario.Utilizador?.Username == currentUsername || isAdmin))
+                                {
+                                    <form asp-controller="Comentario" asp-action="Delete" method="post" asp-route-id="@comentario.Id" class="d-inline">
+                                        <button type="submit" class="btn btn-danger btn-sm mt-1">Apagar comentário</button>
+                                    </form>
+                                }
                             </li>
                         }
                     </ul>

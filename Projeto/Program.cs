@@ -1,43 +1,75 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
+using appMonumentos.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Ligação à base de dados
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
-                       throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+// Adicionar base de dados e Identity
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Identidade
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 6;
+})
+.AddRoles<IdentityRole>() // Adiciona roles
+.AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
-
-// ⬅️ Ativar serviços de sessão
-builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
-
-// ⬅️ Permitir acesso ao HttpContext na view
-builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
-// Pipeline HTTP
-if (app.Environment.IsDevelopment())
+// Criar roles e admin
+using (var scope = app.Services.CreateScope())
 {
-    app.UseMigrationsEndPoint();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    // Criar role "Admin" se não existir
+    var roleExists = await roleManager.RoleExistsAsync("Admin");
+    if (!roleExists)
+    {
+        await roleManager.CreateAsync(new IdentityRole("Admin"));
+    }
+
+    // Verifica se admin já existe
+    var adminEmail = "admin@admin.com";
+    var adminUser = await userManager.FindByEmailAsync(adminEmail);
+    if (adminUser == null)
+    {
+        adminUser = new IdentityUser
+        {
+            UserName = "UtilizadorAdmin",
+            Email = adminEmail,
+            EmailConfirmed = true
+        };
+
+        var result = await userManager.CreateAsync(adminUser, "Admin123!");
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+
+            // Criar entrada correspondente na tabela Utilizador
+            var utilizador = new Utilizador
+            {
+                Username = adminUser.Id,
+                Nome = "Administrador",
+                Email = adminEmail,
+                Password = "Admin123!"
+            };
+
+            context.Utilizador.Add(utilizador);
+            await context.SaveChangesAsync();
+        }
+    }
 }
-else
+
+if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
@@ -47,10 +79,6 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
-// ⬅️ Middleware de sessão (IMPORTANTE: antes do Auth)
-app.UseSession();
-
 app.UseAuthentication();
 app.UseAuthorization();
 

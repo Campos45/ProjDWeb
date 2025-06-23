@@ -3,10 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using appMonumentos.Models;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace WebApplication1.Controllers
 {
+    [Authorize]
     public class VisitaController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -18,12 +22,15 @@ namespace WebApplication1.Controllers
             _userManager = userManager;
         }
 
+        // POST: ToggleVisita
         [HttpPost]
         public async Task<IActionResult> ToggleVisita(int monumentoId)
         {
             var user = await _userManager.GetUserAsync(User);
-            var utilizador = await _context.Utilizador.FirstOrDefaultAsync(u => u.Username == user.UserName);
+            if (user == null)
+                return Unauthorized();
 
+            var utilizador = await _context.Utilizador.FirstOrDefaultAsync(u => u.Username == user.UserName);
             if (utilizador == null)
                 return Unauthorized();
 
@@ -32,6 +39,11 @@ namespace WebApplication1.Controllers
 
             if (visita != null)
             {
+                // Se for Admin ou se for o próprio, permite remover
+                var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+                if (!isAdmin && visita.UtilizadorId != utilizador.Id)
+                    return Forbid();
+
                 _context.VisitaMonumento.Remove(visita);
             }
             else
@@ -47,9 +59,11 @@ namespace WebApplication1.Controllers
             return Ok();
         }
 
+        // GET: ListaVisitantes
         [HttpGet]
         public async Task<IActionResult> ListaVisitantes(int monumentoId)
         {
+            // Apenas autenticados
             var visitantes = await _context.VisitaMonumento
                 .Include(v => v.Utilizador)
                 .Where(v => v.MonumentoId == monumentoId)
