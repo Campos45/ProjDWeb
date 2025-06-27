@@ -1,4 +1,6 @@
-﻿@model IEnumerable<appMonumentos.Models.Localidade>
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor
+@model IEnumerable<appMonumentos.Models.Localidade>
 
 @{
     ViewData["Title"] = "Index";
@@ -19,17 +21,26 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    <tbody>
+    @foreach (var item in Model)
+    {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.NomeLocalidade)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Edit</a>
+                |
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a>
+                @if (User.IsInRole("Admin"))
+                {
+                    <text> | <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a></text>
+                }
             </td>
         </tr>
-}
+    }
+    </tbody>
+
+
     </tbody>
 </table>

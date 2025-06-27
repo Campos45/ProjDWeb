@@ -16,16 +16,16 @@
 
 <table class="table">
     <thead>
-    <tr>
-        <th>@Html.DisplayNameFor(model => model.First().Designacao)</th>
-        <th>@Html.DisplayNameFor(model => model.First().Endereco)</th>
-        <th>@Html.DisplayNameFor(model => model.First().Coordenadas)</th>
-        <th>@Html.DisplayNameFor(model => model.First().EpocaConstrucao)</th>
-        <th>@Html.DisplayNameFor(model => model.First().Descricao)</th>
-        <th>@Html.DisplayNameFor(model => model.First().Utilizador.Nome)</th>
-        <th>@Html.DisplayNameFor(model => model.First().Localidade.Id)</th>
-        <th></th>
-    </tr>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.First().Designacao)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Endereco)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Coordenadas)</th>
+            <th>@Html.DisplayNameFor(model => model.First().EpocaConstrucao)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Descricao)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Utilizador.Nome)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Localidade.Id)</th>
+            <th></th>
+        </tr>
     </thead>
     <tbody>
     @foreach (var item in Model)
@@ -41,17 +41,17 @@
             <td>
                 @if (User.Identity?.IsAuthenticated == true)
                 {
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm me-1">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm me-1">Details</a>
 
-                        @if (User.Identity.Name == "Admin")
+                    @if (User.IsInRole("Admin"))
                     {
-                         <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
                     }
                 }
                 else
                 {
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a>
                 }
             </td>
         </tr>

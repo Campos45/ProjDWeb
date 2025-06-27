@@ -9,22 +9,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14e42af0-b416-4e94-a6b6-58f49122598b" name="Changes" comment="upload de imagens">
+    <list default="true" id="14e42af0-b416-4e94-a6b6-58f49122598b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controllers/ComentarioController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/ComentarioController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/LocalidadeController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/LocalidadeController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controllers/MonumentoController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/MonumentoController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controllers/UtilizadorController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/UtilizadorController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controllers/VisitaController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/VisitaController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data/ApplicationDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/ApplicationDbContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Comentario.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Comentario.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/Monumento/Details.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Monumento/Details.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Shared/_Layout.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/Utilizador/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Utilizador/Index.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Localidade/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Localidade/Index.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Monumento/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Monumento/Index.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/app.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.db-shm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.db-wal" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/wwwroot/imagens/a444c1e6-11a5-4b8a-b1dd-c7f9eae7dcd7.webp" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,8 +50,6 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="mock://C:/Users/Martim/RiderProjects/ProjDWeb/Projeto/Views/Shared/_Layout.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/Martim/RiderProjects/ProjDWeb/Projeto/Views/Shared/_Layout.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/Martim/RiderProjects/ProjDWeb/Projeto/Views/Shared/_LoginPartial.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Views/Utilizador/Login.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -155,6 +144,7 @@
       <workItem from="1750255402168" duration="4577000" />
       <workItem from="1750430387457" duration="5624000" />
       <workItem from="1750515751076" duration="10899000" />
+      <workItem from="1751032766965" duration="5586000" />
     </task>
     <task id="LOCAL-00001" summary="criar monumentos updated v2">
       <option name="closed" value="true" />
@@ -204,7 +194,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750520450725</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="admins com privilegios&#10;eliminar comentarios/imagens">
+      <option name="closed" value="true" />
+      <created>1750644865359</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1750644865359</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -219,6 +217,7 @@
     <MESSAGE value="adicionar botoes para alternar entre controllers" />
     <MESSAGE value="editar acesso ao edit/delete/create/details nos monumentos consoante o tipo de user" />
     <MESSAGE value="upload de imagens" />
-    <option name="LAST_COMMIT_MESSAGE" value="upload de imagens" />
+    <MESSAGE value="admins com privilegios&#10;eliminar comentarios/imagens" />
+    <option name="LAST_COMMIT_MESSAGE" value="admins com privilegios&#10;eliminar comentarios/imagens" />
   </component>
 </project>

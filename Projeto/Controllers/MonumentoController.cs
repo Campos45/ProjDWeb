@@ -121,6 +121,7 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Monumento/Delete/5
+        
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
