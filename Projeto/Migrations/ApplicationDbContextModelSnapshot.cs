@@ -7,7 +7,7 @@ using WebApplication1.Data;
 
 #nullable disable
 
-namespace WebApplication1.Data.Migrations
+namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -29,7 +29,7 @@ namespace WebApplication1.Data.Migrations
 
                     b.HasIndex("MonumentosId");
 
-                    b.ToTable("CaracteristicasMonumento");
+                    b.ToTable("CaracteristicasMonumento", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -248,7 +248,7 @@ namespace WebApplication1.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Caracteristicas");
+                    b.ToTable("Caracteristicas", (string)null);
                 });
 
             modelBuilder.Entity("appMonumentos.Models.Comentario", b =>
@@ -276,7 +276,7 @@ namespace WebApplication1.Data.Migrations
 
                     b.HasIndex("UtilizadorId");
 
-                    b.ToTable("Comentario");
+                    b.ToTable("Comentario", (string)null);
                 });
 
             modelBuilder.Entity("appMonumentos.Models.Imagem", b =>
@@ -304,7 +304,7 @@ namespace WebApplication1.Data.Migrations
 
                     b.HasIndex("UtilizadorId");
 
-                    b.ToTable("Imagem");
+                    b.ToTable("Imagem", (string)null);
                 });
 
             modelBuilder.Entity("appMonumentos.Models.Localidade", b =>
@@ -319,7 +319,7 @@ namespace WebApplication1.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Localidade");
+                    b.ToTable("Localidade", (string)null);
                 });
 
             modelBuilder.Entity("appMonumentos.Models.Monumento", b =>
@@ -360,7 +360,7 @@ namespace WebApplication1.Data.Migrations
 
                     b.HasIndex("UtilizadorId");
 
-                    b.ToTable("Monumento");
+                    b.ToTable("Monumento", (string)null);
                 });
 
             modelBuilder.Entity("appMonumentos.Models.Utilizador", b =>
@@ -370,6 +370,10 @@ namespace WebApplication1.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("IdentityUserId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -391,7 +395,9 @@ namespace WebApplication1.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Utilizador");
+                    b.HasIndex("IdentityUserId");
+
+                    b.ToTable("Utilizador", (string)null);
                 });
 
             modelBuilder.Entity("appMonumentos.Models.VisitaMonumento", b =>
@@ -412,7 +418,7 @@ namespace WebApplication1.Data.Migrations
 
                     b.HasIndex("UtilizadorId");
 
-                    b.ToTable("VisitaMonumento");
+                    b.ToTable("VisitaMonumento", (string)null);
                 });
 
             modelBuilder.Entity("CaracteristicasMonumento", b =>
@@ -490,7 +496,7 @@ namespace WebApplication1.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("appMonumentos.Models.Utilizador", "Utilizador")
-                        .WithMany("Comentario")
+                        .WithMany("Comentarios")
                         .HasForeignKey("UtilizadorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -538,6 +544,17 @@ namespace WebApplication1.Data.Migrations
                     b.Navigation("Utilizador");
                 });
 
+            modelBuilder.Entity("appMonumentos.Models.Utilizador", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
+                        .WithMany()
+                        .HasForeignKey("IdentityUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("IdentityUser");
+                });
+
             modelBuilder.Entity("appMonumentos.Models.VisitaMonumento", b =>
                 {
                     b.HasOne("appMonumentos.Models.Monumento", "Monumento")
@@ -576,7 +593,7 @@ namespace WebApplication1.Data.Migrations
 
             modelBuilder.Entity("appMonumentos.Models.Utilizador", b =>
                 {
-                    b.Navigation("Comentario");
+                    b.Navigation("Comentarios");
 
                     b.Navigation("Monumentos");
 

@@ -1,60 +1,226 @@
 ﻿@model appMonumentos.Models.Monumento
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalhes do Monumento";
+
+    var imagemPrincipal = Model.Imagens?.FirstOrDefault(i => i.IsPrincipal);
+    var imagensSecundarias = Model.Imagens?.Where(i => !i.IsPrincipal).ToList() ?? new List<appMonumentos.Models.Imagem>();
+
+    var userAuthenticated = User.Identity != null && User.Identity.IsAuthenticated;
+    var currentUsername = User.Identity.Name;
+
+    var utilizadorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    var isAdmin = User.IsInRole("Admin");
+    var utilizadorVisitou = Model.VisitasMonumento.Any(v => v.Utilizador.Username == User.Identity.Name);
 }
 
-<h1>Details</h1>
+<h2>@Model.Designacao</h2>
 
-<div>
-    <h4>Monumento</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Designacao)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Designacao)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Endereco)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Endereco)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Coordenadas)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Coordenadas)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EpocaConstrucao)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EpocaConstrucao)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Descricao)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Descricao)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Utilizador)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Utilizador.Nome)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Localidade)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Localidade.Id)
-        </dd>
-    </dl>
+<!-- Mensagens -->
+@if (TempData["Erro"] != null)
+{
+    <div style="color: red; font-weight: bold;">@TempData["Erro"]</div>
+}
+@if (TempData["Sucesso"] != null)
+{
+    <div style="color: green; font-weight: bold;">@TempData["Sucesso"]</div>
+}
+
+<!-- Imagem Principal -->
+<div style="margin-bottom: 30px;">
+    <h4>Imagem Principal:</h4>
+    @if (imagemPrincipal != null)
+    {
+        <img src="~/imagens/@imagemPrincipal.NomeImagem" alt="Imagem Principal" width="400" />
+
+        <!-- Botão de apagar imagem -->
+        @if (userAuthenticated && (imagemPrincipal.Utilizador?.Username == currentUsername || isAdmin))
+        {
+            <form asp-controller="Monumento" asp-action="DeleteImagem" method="post" asp-route-id="@imagemPrincipal.Id" onsubmit="return confirm('Tem a certeza que quer apagar esta imagem?');">
+                <button type="submit" class="btn btn-danger btn-sm mt-2">Apagar imagem</button>
+            </form>
+        }
+
+        <!-- Comentários -->
+        <h5 class="mt-3">Comentários:</h5>
+        @if (imagemPrincipal.Comentarios != null && imagemPrincipal.Comentarios.Any())
+        {
+            <ul>
+                @foreach (var comentario in imagemPrincipal.Comentarios.OrderByDescending(c => c.Data))
+                {
+                    <li>
+                        <strong>
+                            @comentario.Utilizador?.Username
+                            @(comentario.Utilizador?.Id == Model.Utilizador?.Id ? " (criador deste monumento)" : "")
+                        </strong>: @comentario.ComentarioTexto
+                        <br />
+                        <small>@comentario.Data.ToString("dd/MM/yyyy HH:mm")</small>
+
+                        @if (userAuthenticated && (comentario.Utilizador?.Username == currentUsername || isAdmin))
+                        {
+                            <form asp-controller="Comentario" asp-action="Delete" method="post" asp-route-id="@comentario.Id" class="d-inline">
+                                <button type="submit" class="btn btn-danger btn-sm mt-1">Apagar comentário</button>
+                            </form>
+                        }
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p><i>Sem comentários.</i></p>
+        }
+
+        <!-- Formulário para novo comentário -->
+        @if (userAuthenticated)
+        {
+            <form asp-controller="Comentario" asp-action="Criar" method="post">
+                <input type="hidden" name="ImagemId" value="@imagemPrincipal.Id" />
+                <div class="form-group">
+                    <label for="ComentarioTexto">Comentário:</label>
+                    <textarea name="ComentarioTexto" class="form-control" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Submeter Comentário</button>
+            </form>
+        }
+        else
+        {
+            <p><i>Inicie sessão para comentar esta imagem.</i></p>
+        }
+    }
+    else
+    {
+        <div style="width:400px; height:250px; background-color:lightgray; text-align:center; line-height:250px;">
+            Sem imagem principal
+        </div>
+    }
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+<!-- Upload de Imagem -->
+@if (userAuthenticated)
+{
+    <h4>Enviar nova imagem:</h4>
+
+    @if (Model.Utilizador?.Username == currentUsername && imagemPrincipal == null)
+    {
+        <p><i>Como criador, esta imagem será marcada como principal.</i></p>
+    }
+
+    <form asp-action="UploadImagem" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="monumentoId" value="@Model.Id" />
+        <input type="file" name="imagem" required />
+        <button type="submit">Enviar Imagem</button>
+    </form>
+}
+else
+{
+    <p><i>Inicie sessão para enviar imagens.</i></p>
+}
+
+<!-- Imagens Secundárias -->
+@if (imagensSecundarias.Any())
+{
+    <h4>Imagens dos Utilizadores:</h4>
+    <div>
+        @foreach (var img in imagensSecundarias)
+        {
+            <div style="margin-bottom: 20px; border: 1px solid #ccc; padding: 10px;">
+                <img src="~/imagens/@img.NomeImagem" alt="Imagem Secundária" width="300" />
+
+                <!-- Botão de apagar imagem -->
+                @if (userAuthenticated && (img.Utilizador?.Username == currentUsername || isAdmin))
+                {
+                    <form asp-controller="Monumento" asp-action="DeleteImagem" method="post" asp-route-id="@img.Id" onsubmit="return confirm('Tem a certeza que quer apagar esta imagem?');">
+                        <button type="submit" class="btn btn-danger btn-sm mt-2">Apagar imagem</button>
+                    </form>
+                }
+
+                <!-- Comentários -->
+                <h5 class="mt-3">Comentários:</h5>
+                @if (img.Comentarios != null && img.Comentarios.Any())
+                {
+                    <ul>
+                        @foreach (var comentario in img.Comentarios.OrderByDescending(c => c.Data))
+                        {
+                            <li>
+                                <strong>
+                                    @comentario.Utilizador?.Username
+                                    @(comentario.Utilizador?.Id == Model.Utilizador?.Id ? " (criador deste monumento)" : "")
+                                </strong>: @comentario.ComentarioTexto
+                                <br />
+                                <small>@comentario.Data.ToString("dd/MM/yyyy HH:mm")</small>
+
+                                @if (userAuthenticated && (comentario.Utilizador?.Username == currentUsername || isAdmin))
+                                {
+                                    <form asp-controller="Comentario" asp-action="Delete" method="post" asp-route-id="@comentario.Id" class="d-inline">
+                                        <button type="submit" class="btn btn-danger btn-sm mt-1">Apagar comentário</button>
+                                    </form>
+                                }
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p><i>Sem comentários.</i></p>
+                }
+
+                <!-- Formulário para novo comentário -->
+                @if (userAuthenticated)
+                {
+                    <form asp-controller="Comentario" asp-action="Criar" method="post">
+                        <input type="hidden" name="ImagemId" value="@img.Id" />
+                        <div class="form-group">
+                            <label for="ComentarioTexto">Comentário:</label>
+                            <textarea name="ComentarioTexto" class="form-control" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-2">Submeter Comentário</button>
+                    </form>
+                }
+                else
+                {
+                    <p><i>Inicie sessão para comentar esta imagem.</i></p>
+                }
+            </div>
+        }
+    </div>
+}
+
+<!-- Marcar como Visitado e Mostrar Lista -->
+@if (userAuthenticated)
+{
+    <form asp-action="ToggleVisita" asp-controller="Monumento" method="post" style="margin-top: 15px;">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit" class="btn @(utilizadorVisitou ? "btn-success" : "btn-outline-secondary")">
+            @(utilizadorVisitou ? "✓ Já Visitaste (clique para remover)" : "Marcar como Visitado")
+        </button>
+    </form>
+
+    <button class="btn btn-info mt-2" type="button" onclick="toggleListaVisitantes()">Mostrar/Esconder Lista de Visitantes</button>
+
+    <div id="listaVisitantes" class="mt-2" style="display: none;">
+        <h5>Utilizadores que visitaram:</h5>
+        @if (Model.VisitasMonumento.Any())
+        {
+            <ul>
+                @foreach (var visita in Model.VisitasMonumento)
+                {
+                    <li>@visita.Utilizador.Nome</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p><i>Ainda ninguém marcou como visitado.</i></p>
+        }
+    </div>
+
+    <script>
+        function toggleListaVisitantes() {
+            const div = document.getElementById("listaVisitantes");
+            div.style.display = (div.style.display === "none") ? "block" : "none";
+        }
+    </script>
+}

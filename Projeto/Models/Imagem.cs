@@ -1,21 +1,25 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace appMonumentos.Models;
 
 public class Imagem
 {
-    [Display(Name = "ID")]
     public int Id { get; set; }
 
     [Required]
-    [Display(Name = "Nome da Imagem")]
     public string NomeImagem { get; set; }
 
-    [Display(Name = "ID do Monumento")]
+    [Required]
     public int MonumentoId { get; set; }
-    
-    [Display(Name = "Monumento")]
     public Monumento Monumento { get; set; }
 
+    [Required]
+    public int UtilizadorId { get; set; }
+    public Utilizador Utilizador { get; set; }
+
+    public bool IsPrincipal { get; set; } = false;
+    
     public ICollection<Comentario> Comentarios { get; set; } = new List<Comentario>();
+
 }

@@ -1,59 +1,47 @@
 ﻿@model IEnumerable<appMonumentos.Models.Utilizador>
+@using Microsoft.AspNetCore.Identity
 
 @{
     ViewData["Title"] = "Index";
+    var isAdmin = User.IsInRole("Admin");
 }
 
-<h1>Index</h1>
+<h1>Utilizadores</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (isAdmin)
+{
+    <p>
+        <a asp-action="Create" class="btn btn-primary">Create New</a>
+    </p>
+}
+
 <table class="table">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Username)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Password)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Nome)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LocalidadeUtilizador)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>@Html.DisplayNameFor(m => m.Username)</th>
+        <th>@Html.DisplayNameFor(m => m.Nome)</th>
+        <th>@Html.DisplayNameFor(m => m.LocalidadeUtilizador)</th>
+        <th>@Html.DisplayNameFor(m => m.Email)</th>
+        <th></th>
+    </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var item in Model)
+    {
         <tr>
+            <td>@Html.DisplayFor(m => item.Username)</td>
+            <td>@Html.DisplayFor(m => item.Nome)</td>
+            <td>@Html.DisplayFor(m => item.LocalidadeUtilizador)</td>
+            <td>@Html.DisplayFor(m => item.Email)</td>
             <td>
-                @Html.DisplayFor(modelItem => item.Username)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Password)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LocalidadeUtilizador)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-secondary">Edit</a>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a>
+                @if (isAdmin)
+                {
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                }
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>

@@ -37,4 +37,8 @@ public class Monumento
     public ICollection<Imagem> Imagens { get; set; } = new List<Imagem>();
 
     public ICollection<Caracteristicas> Caracteristicas { get; set; } = new List<Caracteristicas>();
+    
+    public List<VisitaMonumento> VisitasMonumento { get; set; } = new List<VisitaMonumento>();
+
+    
 }

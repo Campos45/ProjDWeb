@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Data;
 
@@ -10,9 +11,11 @@ using WebApplication1.Data;
 namespace WebApplication1.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250621144701_migracao1")]
+    partial class migracao1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.13");
@@ -267,7 +270,7 @@ namespace WebApplication1.Data.Migrations
                     b.Property<int>("ImagemId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("UtilizadorId")
+                    b.Property<int?>("UtilizadorId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -394,27 +397,6 @@ namespace WebApplication1.Data.Migrations
                     b.ToTable("Utilizador");
                 });
 
-            modelBuilder.Entity("appMonumentos.Models.VisitaMonumento", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MonumentoId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("UtilizadorId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MonumentoId");
-
-                    b.HasIndex("UtilizadorId");
-
-                    b.ToTable("VisitaMonumento");
-                });
-
             modelBuilder.Entity("CaracteristicasMonumento", b =>
                 {
                     b.HasOne("appMonumentos.Models.Caracteristicas", null)
@@ -484,20 +466,16 @@ namespace WebApplication1.Data.Migrations
             modelBuilder.Entity("appMonumentos.Models.Comentario", b =>
                 {
                     b.HasOne("appMonumentos.Models.Imagem", "Imagem")
-                        .WithMany("Comentarios")
+                        .WithMany()
                         .HasForeignKey("ImagemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("appMonumentos.Models.Utilizador", "Utilizador")
+                    b.HasOne("appMonumentos.Models.Utilizador", null)
                         .WithMany("Comentario")
-                        .HasForeignKey("UtilizadorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UtilizadorId");
 
                     b.Navigation("Imagem");
-
-                    b.Navigation("Utilizador");
                 });
 
             modelBuilder.Entity("appMonumentos.Models.Imagem", b =>
@@ -538,30 +516,6 @@ namespace WebApplication1.Data.Migrations
                     b.Navigation("Utilizador");
                 });
 
-            modelBuilder.Entity("appMonumentos.Models.VisitaMonumento", b =>
-                {
-                    b.HasOne("appMonumentos.Models.Monumento", "Monumento")
-                        .WithMany("VisitasMonumento")
-                        .HasForeignKey("MonumentoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("appMonumentos.Models.Utilizador", "Utilizador")
-                        .WithMany("VisitasAosMonumentos")
-                        .HasForeignKey("UtilizadorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Monumento");
-
-                    b.Navigation("Utilizador");
-                });
-
-            modelBuilder.Entity("appMonumentos.Models.Imagem", b =>
-                {
-                    b.Navigation("Comentarios");
-                });
-
             modelBuilder.Entity("appMonumentos.Models.Localidade", b =>
                 {
                     b.Navigation("Monumentos");
@@ -570,8 +524,6 @@ namespace WebApplication1.Data.Migrations
             modelBuilder.Entity("appMonumentos.Models.Monumento", b =>
                 {
                     b.Navigation("Imagens");
-
-                    b.Navigation("VisitasMonumento");
                 });
 
             modelBuilder.Entity("appMonumentos.Models.Utilizador", b =>
@@ -579,8 +531,6 @@ namespace WebApplication1.Data.Migrations
                     b.Navigation("Comentario");
 
                     b.Navigation("Monumentos");
-
-                    b.Navigation("VisitasAosMonumentos");
                 });
 #pragma warning restore 612, 618
         }

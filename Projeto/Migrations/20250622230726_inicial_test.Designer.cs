@@ -2,17 +2,20 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Data;
 
 #nullable disable
 
-namespace WebApplication1.Data.Migrations
+namespace WebApplication1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250622230726_inicial_test")]
+    partial class inicial_test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.13");
@@ -373,6 +376,10 @@ namespace WebApplication1.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("IdentityUserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("LocalidadeUtilizador")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -390,6 +397,8 @@ namespace WebApplication1.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IdentityUserId");
 
                     b.ToTable("Utilizador");
                 });
@@ -490,7 +499,7 @@ namespace WebApplication1.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("appMonumentos.Models.Utilizador", "Utilizador")
-                        .WithMany("Comentario")
+                        .WithMany("Comentarios")
                         .HasForeignKey("UtilizadorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -538,6 +547,17 @@ namespace WebApplication1.Data.Migrations
                     b.Navigation("Utilizador");
                 });
 
+            modelBuilder.Entity("appMonumentos.Models.Utilizador", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
+                        .WithMany()
+                        .HasForeignKey("IdentityUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("IdentityUser");
+                });
+
             modelBuilder.Entity("appMonumentos.Models.VisitaMonumento", b =>
                 {
                     b.HasOne("appMonumentos.Models.Monumento", "Monumento")
@@ -576,7 +596,7 @@ namespace WebApplication1.Data.Migrations
 
             modelBuilder.Entity("appMonumentos.Models.Utilizador", b =>
                 {
-                    b.Navigation("Comentario");
+                    b.Navigation("Comentarios");
 
                     b.Navigation("Monumentos");
 

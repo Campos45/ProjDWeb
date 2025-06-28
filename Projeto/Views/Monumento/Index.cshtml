@@ -1,71 +1,60 @@
 ﻿@model IEnumerable<appMonumentos.Models.Monumento>
+@using Microsoft.AspNetCore.Identity
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Monumentos</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <p>
+        <a asp-action="Create" class="btn btn-primary">Create New</a>
+    </p>
+}
+
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Designacao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Endereco)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Coordenadas)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EpocaConstrucao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descricao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Utilizador)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Localidade)
-            </th>
+            <th>@Html.DisplayNameFor(model => model.First().Designacao)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Endereco)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Coordenadas)</th>
+            <th>@Html.DisplayNameFor(model => model.First().EpocaConstrucao)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Descricao)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Utilizador.Nome)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Localidade.Id)</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var item in Model)
+    {
         <tr>
+            <td>@item.Designacao</td>
+            <td>@item.Endereco</td>
+            <td>@item.Coordenadas</td>
+            <td>@item.EpocaConstrucao</td>
+            <td>@item.Descricao</td>
+            <td>@item.Utilizador?.Nome</td>
+            <td>@item.Localidade?.Id</td>
             <td>
-                @Html.DisplayFor(modelItem => item.Designacao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Endereco)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Coordenadas)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EpocaConstrucao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descricao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Utilizador.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Localidade.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm me-1">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm me-1">Details</a>
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                    }
+                }
+                else
+                {
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a>
+                }
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>
