@@ -9,7 +9,42 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14e42af0-b416-4e94-a6b6-58f49122598b" name="Changes" comment="" />
+    <list default="true" id="14e42af0-b416-4e94-a6b6-58f49122598b" name="Changes" comment="commit to main">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/ComentarioController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/ComentarioController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/HomeController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/HomeController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/LocalidadeController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/LocalidadeController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/MonumentoController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/MonumentoController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/UtilizadorController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/UtilizadorController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/VisitaController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/VisitaController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Caracteristicas.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Caracteristicas.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Comentario.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Comentario.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Imagem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Imagem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Localidade.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Localidade.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Monumento.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Monumento.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Utilizador.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Utilizador.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/VisitaMonumento.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/VisitaMonumento.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Home/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Home/Index.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Home/Privacy.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Home/Privacy.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Localidade/Create.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Localidade/Create.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Localidade/Delete.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Localidade/Delete.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Localidade/Details.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Localidade/Details.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Localidade/Edit.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Localidade/Edit.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Localidade/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Localidade/Index.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Monumento/Create.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Monumento/Create.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Monumento/Delete.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Monumento/Delete.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Monumento/Details.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Monumento/Details.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Monumento/Edit.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Monumento/Edit.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Monumento/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Monumento/Index.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Utilizador/Create.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Utilizador/Create.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Utilizador/Delete.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Utilizador/Delete.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Utilizador/Details.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Utilizador/Details.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Utilizador/Edit.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Utilizador/Edit.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Utilizador/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Utilizador/Index.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Utilizador/Login.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Utilizador/Login.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Visita/_ListaVisitantesPartial.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Visita/_ListaVisitantesPartial.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/app.db" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -203,7 +238,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751047577800</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="commit to main">
+      <option name="closed" value="true" />
+      <created>1751154409801</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1751154409801</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -220,6 +263,7 @@
     <MESSAGE value="upload de imagens" />
     <MESSAGE value="admins com privilegios&#10;eliminar comentarios/imagens" />
     <MESSAGE value="pormenores corrigidos" />
-    <option name="LAST_COMMIT_MESSAGE" value="" />
+    <MESSAGE value="commit to main" />
+    <option name="LAST_COMMIT_MESSAGE" value="commit to main" />
   </component>
 </project>

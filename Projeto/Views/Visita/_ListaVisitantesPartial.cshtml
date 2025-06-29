@@ -1,9 +1,14 @@
 @model List<string>
 
+<!-- Título da secção que indica o conteúdo da lista -->
 <h4>Utilizadores que visitaram este monumento:</h4>
+
+<!-- Lista não ordenada para mostrar os nomes dos visitantes -->
 <ul>
+    <!-- Percorre a lista de nomes recebida no modelo -->
     @foreach (var nome in Model)
     {
+        <!-- Apresenta cada nome numa linha da lista -->
         <li>@nome</li>
     }
 </ul>

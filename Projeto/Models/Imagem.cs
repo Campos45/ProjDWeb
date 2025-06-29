@@ -3,23 +3,25 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace appMonumentos.Models;
 
+// Modelo que representa uma imagem associada a um monumento
 public class Imagem
 {
-    public int Id { get; set; }
+    public int Id { get; set; }  // Identificador único da imagem
 
-    [Required]
-    public string NomeImagem { get; set; }
+    [Required]  // Campo obrigatório
+    public string NomeImagem { get; set; }  // Nome do ficheiro da imagem
 
-    [Required]
+    [Required]  // Campo obrigatório, chave estrangeira para Monumento
     public int MonumentoId { get; set; }
-    public Monumento Monumento { get; set; }
+    public Monumento Monumento { get; set; }  // Propriedade de navegação para o monumento associado
 
-    [Required]
+    [Required]  // Campo obrigatório, chave estrangeira para Utilizador
     public int UtilizadorId { get; set; }
-    public Utilizador Utilizador { get; set; }
+    public Utilizador Utilizador { get; set; }  // Propriedade de navegação para o utilizador que adicionou a imagem
 
+    // Indica se esta imagem é a imagem principal do monumento (por defeito é falso)
     public bool IsPrincipal { get; set; } = false;
-    
-    public ICollection<Comentario> Comentarios { get; set; } = new List<Comentario>();
 
+    // Relação 1:N: uma imagem pode ter vários comentários associados
+    public ICollection<Comentario> Comentarios { get; set; } = new List<Comentario>();
 }

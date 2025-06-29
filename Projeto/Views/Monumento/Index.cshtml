@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Identity
 
 @{
+    // Define o título da página
     ViewData["Title"] = "Index";
 }
 
@@ -9,6 +10,7 @@
 
 @if (User.Identity?.IsAuthenticated == true)
 {
+    // Se o utilizador estiver autenticado, mostra botão para criar novo monumento
     <p>
         <a asp-action="Create" class="btn btn-primary">Create New</a>
     </p>
@@ -17,6 +19,7 @@
 <table class="table">
     <thead>
         <tr>
+            <!-- Cabeçalhos da tabela com os nomes dos campos do modelo -->
             <th>@Html.DisplayNameFor(model => model.First().Designacao)</th>
             <th>@Html.DisplayNameFor(model => model.First().Endereco)</th>
             <th>@Html.DisplayNameFor(model => model.First().Coordenadas)</th>
@@ -24,33 +27,37 @@
             <th>@Html.DisplayNameFor(model => model.First().Descricao)</th>
             <th>@Html.DisplayNameFor(model => model.First().Utilizador.Nome)</th>
             <th>@Html.DisplayNameFor(model => model.First().Localidade.Id)</th>
-            <th></th>
+            <th></th> <!-- Coluna para botões de ação -->
         </tr>
     </thead>
     <tbody>
     @foreach (var item in Model)
     {
         <tr>
+            <!-- Mostra os dados de cada monumento na tabela -->
             <td>@item.Designacao</td>
             <td>@item.Endereco</td>
             <td>@item.Coordenadas</td>
             <td>@item.EpocaConstrucao</td>
             <td>@item.Descricao</td>
-            <td>@item.Utilizador?.Nome</td>
-            <td>@item.Localidade?.Id</td>
+            <td>@item.Utilizador?.Nome</td> <!-- Usa ? para evitar erro se Utilizador for null -->
+            <td>@item.Localidade?.Id</td>  <!-- Usa ? para evitar erro se Localidade for null -->
             <td>
                 @if (User.Identity?.IsAuthenticated == true)
                 {
+                    // Se estiver autenticado, mostra botões para Editar e Detalhes
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm me-1">Edit</a>
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm me-1">Details</a>
 
                     @if (User.IsInRole("Admin"))
                     {
+                        // Se for Admin, mostra também botão para apagar o monumento
                         <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
                     }
                 }
                 else
                 {
+                    // Se não estiver autenticado, só mostra botão para ver detalhes
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a>
                 }
             </td>

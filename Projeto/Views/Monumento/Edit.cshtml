@@ -1,6 +1,7 @@
 ﻿@model appMonumentos.Models.Monumento
 
 @{
+    // Define o título da página
     ViewData["Title"] = "Edit";
 }
 
@@ -8,46 +9,68 @@
 
 <h4>Monumento</h4>
 <hr />
+
 <div class="row">
     <div class="col-md-4">
+        <!-- Formulário que envia para a ação Edit do controlador atual -->
         <form asp-action="Edit">
+            <!-- Resumo de erros de validação para o modelo -->
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Campo oculto para o Id do monumento, necessário para identificar o registro -->
             <input type="hidden" asp-for="Id" />
+
+            <!-- Campo para editar a designação do monumento -->
             <div class="form-group">
                 <label asp-for="Designacao" class="control-label"></label>
                 <input asp-for="Designacao" class="form-control" />
+                <!-- Mensagem de erro de validação para Designacao -->
                 <span asp-validation-for="Designacao" class="text-danger"></span>
             </div>
+
+            <!-- Campo para editar o endereço -->
             <div class="form-group">
                 <label asp-for="Endereco" class="control-label"></label>
                 <input asp-for="Endereco" class="form-control" />
                 <span asp-validation-for="Endereco" class="text-danger"></span>
             </div>
+
+            <!-- Campo para editar as coordenadas geográficas -->
             <div class="form-group">
                 <label asp-for="Coordenadas" class="control-label"></label>
                 <input asp-for="Coordenadas" class="form-control" />
                 <span asp-validation-for="Coordenadas" class="text-danger"></span>
             </div>
+
+            <!-- Campo para editar a época de construção -->
             <div class="form-group">
                 <label asp-for="EpocaConstrucao" class="control-label"></label>
                 <input asp-for="EpocaConstrucao" class="form-control" />
                 <span asp-validation-for="EpocaConstrucao" class="text-danger"></span>
             </div>
+
+            <!-- Campo para editar a descrição do monumento -->
             <div class="form-group">
                 <label asp-for="Descricao" class="control-label"></label>
                 <input asp-for="Descricao" class="form-control" />
                 <span asp-validation-for="Descricao" class="text-danger"></span>
             </div>
+
+            <!-- Dropdown para selecionar o utilizador associado -->
             <div class="form-group">
                 <label asp-for="UtilizadorId" class="control-label"></label>
                 <select asp-for="UtilizadorId" class="form-control" asp-items="ViewBag.UtilizadorId"></select>
                 <span asp-validation-for="UtilizadorId" class="text-danger"></span>
             </div>
+
+            <!-- Dropdown para selecionar a localidade associada -->
             <div class="form-group">
                 <label asp-for="LocalidadeId" class="control-label"></label>
                 <select asp-for="LocalidadeId" class="form-control" asp-items="ViewBag.LocalidadeId"></select>
                 <span asp-validation-for="LocalidadeId" class="text-danger"></span>
             </div>
+
+            <!-- Botão para submeter o formulário e guardar alterações -->
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -55,10 +78,12 @@
     </div>
 </div>
 
+<!-- Link para voltar à lista de monumentos -->
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
+    <!-- Inclui scripts para validação cliente com jquery unobtrusive -->
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

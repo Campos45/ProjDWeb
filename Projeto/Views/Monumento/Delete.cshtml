@@ -1,63 +1,91 @@
 ﻿@model appMonumentos.Models.Monumento
 
 @{
+    // Define o título da página como "Delete"
     ViewData["Title"] = "Delete";
 }
 
 <h1>Delete</h1>
 
+<!-- Pergunta para confirmar se o utilizador quer mesmo apagar o monumento -->
 <h3>Are you sure you want to delete this?</h3>
+
 <div>
     <h4>Monumento</h4>
     <hr />
+    <!-- Lista de detalhes do monumento apresentados em formato de definição -->
     <dl class="row">
+        <!-- Rótulo para o campo Designação -->
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Designacao)
         </dt>
+        <!-- Valor do campo Designação do monumento -->
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Designacao)
         </dd>
+
+        <!-- Rótulo para o campo Endereço -->
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Endereco)
         </dt>
+        <!-- Valor do campo Endereço -->
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Endereco)
         </dd>
+
+        <!-- Rótulo para o campo Coordenadas -->
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Coordenadas)
         </dt>
+        <!-- Valor do campo Coordenadas -->
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Coordenadas)
         </dd>
+
+        <!-- Rótulo para o campo Época de Construção -->
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.EpocaConstrucao)
         </dt>
+        <!-- Valor do campo Época de Construção -->
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.EpocaConstrucao)
         </dd>
+
+        <!-- Rótulo para o campo Descrição -->
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Descricao)
         </dt>
+        <!-- Valor do campo Descrição -->
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Descricao)
         </dd>
+
+        <!-- Rótulo para o campo Utilizador (criador do monumento) -->
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Utilizador)
         </dt>
+        <!-- Nome do utilizador criador do monumento -->
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Utilizador.Nome)
         </dd>
+
+        <!-- Rótulo para o campo Localidade -->
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Localidade)
         </dt>
+        <!-- ID da localidade associada ao monumento -->
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Localidade.Id)
         </dd>
     </dl>
-    
+
+    <!-- Formulário para submeter o pedido de eliminação do monumento -->
     <form asp-action="Delete">
+        <!-- Campo escondido que contém o Id do monumento a eliminar -->
         <input type="hidden" asp-for="Id" />
+        <!-- Botão para confirmar a eliminação -->
         <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <!-- Link para voltar à lista de monumentos sem eliminar -->
         <a asp-action="Index">Back to List</a>
     </form>
 </div>

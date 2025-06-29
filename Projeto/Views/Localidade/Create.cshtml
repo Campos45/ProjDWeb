@@ -1,6 +1,7 @@
 ﻿@model appMonumentos.Models.Localidade
 
 @{
+    // Define o título da página
     ViewData["Title"] = "Create";
 }
 
@@ -10,24 +11,34 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        <!-- Formulário para criar nova Localidade -->
         <form asp-action="Create">
+            <!-- Mensagem de validação dos erros do modelo -->
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
+                <!-- Label para o campo NomeLocalidade -->
                 <label asp-for="NomeLocalidade" class="control-label"></label>
+                <!-- Campo de input para o nome da localidade -->
                 <input asp-for="NomeLocalidade" class="form-control" />
+                <!-- Mensagem de erro específica para o campo NomeLocalidade -->
                 <span asp-validation-for="NomeLocalidade" class="text-danger"></span>
             </div>
+
             <div class="form-group">
+                <!-- Botão para submeter o formulário -->
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
+<!-- Link para voltar à lista de localidades -->
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
+    <!-- Carrega os scripts para validação do formulário no lado cliente -->
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

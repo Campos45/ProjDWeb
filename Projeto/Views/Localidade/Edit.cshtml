@@ -1,6 +1,7 @@
 ﻿@model appMonumentos.Models.Localidade
 
 @{
+    // Define o título da página
     ViewData["Title"] = "Edit";
 }
 
@@ -10,25 +11,37 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        <!-- Formulário para editar a localidade -->
         <form asp-action="Edit">
+            <!-- Mensagem de validação de erros do modelo -->
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Campo escondido com o Id da localidade -->
             <input type="hidden" asp-for="Id" />
+
             <div class="form-group">
+                <!-- Label para o nome da localidade -->
                 <label asp-for="NomeLocalidade" class="control-label"></label>
+                <!-- Campo input para o nome -->
                 <input asp-for="NomeLocalidade" class="form-control" />
+                <!-- Mensagem de erro específica para o campo -->
                 <span asp-validation-for="NomeLocalidade" class="text-danger"></span>
             </div>
+
             <div class="form-group">
+                <!-- Botão para submeter as alterações -->
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
+<!-- Link para voltar à lista de localidades -->
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
+    <!-- Scripts para validação cliente -->
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

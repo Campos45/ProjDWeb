@@ -3,35 +3,42 @@
 @model IEnumerable<appMonumentos.Models.Localidade>
 
 @{
+    // Define o título da página
     ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
 
 <p>
+    <!-- Link para criar uma nova localidade -->
     <a asp-action="Create">Create New</a>
 </p>
+
 <table class="table">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.NomeLocalidade)
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <!-- Cabeçalho da coluna para o nome da localidade -->
+        <th>
+            @Html.DisplayNameFor(model => model.NomeLocalidade)
+        </th>
+        <th></th> <!-- Coluna para os botões de ação -->
+    </tr>
     </thead>
-    <tbody>
     <tbody>
     @foreach (var item in Model)
     {
         <tr>
+            <!-- Mostra o nome da localidade -->
             <td>
                 @Html.DisplayFor(modelItem => item.NomeLocalidade)
             </td>
             <td>
+                <!-- Botão para editar -->
                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Edit</a>
                 |
+                <!-- Botão para detalhes -->
                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a>
+                @* Só admins podem eliminar *@
                 @if (User.IsInRole("Admin"))
                 {
                     <text> | <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a></text>
@@ -39,8 +46,5 @@
             </td>
         </tr>
     }
-    </tbody>
-
-
     </tbody>
 </table>

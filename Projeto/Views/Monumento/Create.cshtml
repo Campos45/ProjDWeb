@@ -1,6 +1,7 @@
 ﻿@model appMonumentos.Models.Monumento
 
 @{
+    // Define o título da página
     ViewData["Title"] = "Create";
 }
 
@@ -8,51 +9,75 @@
 
 <h4>Monumento</h4>
 <hr />
+
 <div class="row">
     <div class="col-md-4">
+        <!-- Formulário para criar um novo monumento -->
         <form asp-action="Create">
+            <!-- Mostra erros de validação relacionados com o modelo -->
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Campo para inserir a designação do monumento -->
             <div class="form-group">
                 <label asp-for="Designacao" class="control-label"></label>
                 <input asp-for="Designacao" class="form-control" />
+                <!-- Mensagem de erro para o campo Designacao -->
                 <span asp-validation-for="Designacao" class="text-danger"></span>
             </div>
+
+            <!-- Campo para inserir o endereço do monumento -->
             <div class="form-group">
                 <label asp-for="Endereco" class="control-label"></label>
                 <input asp-for="Endereco" class="form-control" />
+                <!-- Mensagem de erro para o campo Endereco -->
                 <span asp-validation-for="Endereco" class="text-danger"></span>
             </div>
+
+            <!-- Campo para inserir as coordenadas geográficas do monumento -->
             <div class="form-group">
                 <label asp-for="Coordenadas" class="control-label"></label>
                 <input asp-for="Coordenadas" class="form-control" />
+                <!-- Mensagem de erro para o campo Coordenadas -->
                 <span asp-validation-for="Coordenadas" class="text-danger"></span>
             </div>
+
+            <!-- Campo para inserir a época de construção do monumento -->
             <div class="form-group">
                 <label asp-for="EpocaConstrucao" class="control-label"></label>
                 <input asp-for="EpocaConstrucao" class="form-control" />
+                <!-- Mensagem de erro para o campo EpocaConstrucao -->
                 <span asp-validation-for="EpocaConstrucao" class="text-danger"></span>
             </div>
+
+            <!-- Campo para inserir a descrição do monumento -->
             <div class="form-group">
                 <label asp-for="Descricao" class="control-label"></label>
                 <input asp-for="Descricao" class="form-control" />
+                <!-- Mensagem de erro para o campo Descricao -->
                 <span asp-validation-for="Descricao" class="text-danger"></span>
             </div>
+
+            <!-- Dropdown para selecionar o utilizador criador do monumento -->
             <div class="form-group">
                 <label asp-for="UtilizadorId" class="control-label"></label>
                 <select asp-for="UtilizadorId" class="form-control" asp-items="ViewBag.UtilizadorId">
                     <option value="">Selecione um utilizador</option>
                 </select>
+                <!-- Mensagem de erro para o campo UtilizadorId -->
                 <span asp-validation-for="UtilizadorId" class="text-danger"></span>
-            </div> 
+            </div>
 
+            <!-- Dropdown para selecionar a localidade do monumento -->
             <div class="form-group">
                 <label asp-for="LocalidadeId" class="control-label"></label>
                 <select asp-for="LocalidadeId" class="form-control" asp-items="ViewBag.LocalidadeId">
                     <option value="">Selecione uma localidade</option>
                 </select>
+                <!-- Mensagem de erro para o campo LocalidadeId -->
                 <span asp-validation-for="LocalidadeId" class="text-danger"></span>
             </div>
-            
+
+            <!-- Botão para submeter o formulário e criar o monumento -->
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -60,13 +85,16 @@
     </div>
 </div>
 
+<!-- Link para voltar à lista de monumentos -->
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
+    <!-- Carrega os scripts de validação para o formulário -->
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    @Html.ValidationSummary()//mostrar erros
-    <p>Valor de UtilizadorId: @Model?.UtilizadorId</p>
-    <p>Valor de LocalidadeId: @Model?.LocalidadeId</p>
+
+    <!-- Validação resumida, para mostrar erros globais se existirem -->
+    @Html.ValidationSummary()
+
 }

@@ -1,6 +1,7 @@
 ﻿@model appMonumentos.Models.Localidade
 
 @{
+    // Define o título da página
     ViewData["Title"] = "Details";
 }
 
@@ -10,15 +11,19 @@
     <h4>Localidade</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <!-- Mostra o nome da localidade -->
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.NomeLocalidade)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.NomeLocalidade)
         </dd>
     </dl>
 </div>
+
 <div>
+    <!-- Link para editar a localidade atual -->
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <!-- Link para voltar à lista -->
     <a asp-action="Index">Back to List</a>
 </div>

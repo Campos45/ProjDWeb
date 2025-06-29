@@ -1,6 +1,7 @@
 ﻿@model appMonumentos.Models.Utilizador
 
 @{
+    // Define o título da página
     ViewData["Title"] = "Edit";
 }
 
@@ -10,34 +11,59 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        <!-- Formulário para editar um utilizador -->
         <form asp-action="Edit">
+            <!-- Mostra sumário de erros de validação -->
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <!-- Campo oculto para enviar o Id do utilizador (essencial para identificar o registo a atualizar) -->
             <input type="hidden" asp-for="Id" />
+            
             <div class="form-group">
+                <!-- Label para o campo Username -->
                 <label asp-for="Username" class="control-label"></label>
+                <!-- Campo input para alterar o Username -->
                 <input asp-for="Username" class="form-control" />
+                <!-- Mensagem de erro para o Username -->
                 <span asp-validation-for="Username" class="text-danger"></span>
             </div>
+            
             <div class="form-group">
+                <!-- Label para o campo Password -->
                 <label asp-for="Password" class="control-label"></label>
+                <!-- Campo input para alterar a Password -->
                 <input asp-for="Password" class="form-control" />
+                <!-- Mensagem de erro para a Password -->
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
+            
             <div class="form-group">
+                <!-- Label para o campo Nome -->
                 <label asp-for="Nome" class="control-label"></label>
+                <!-- Campo input para alterar o Nome -->
                 <input asp-for="Nome" class="form-control" />
+                <!-- Mensagem de erro para o Nome -->
                 <span asp-validation-for="Nome" class="text-danger"></span>
             </div>
+            
             <div class="form-group">
+                <!-- Label para o campo Localidade do utilizador -->
                 <label asp-for="LocalidadeUtilizador" class="control-label"></label>
+                <!-- Campo input para alterar a Localidade -->
                 <input asp-for="LocalidadeUtilizador" class="form-control" />
+                <!-- Mensagem de erro para a Localidade -->
                 <span asp-validation-for="LocalidadeUtilizador" class="text-danger"></span>
             </div>
+            
             <div class="form-group">
+                <!-- Label para o campo Email -->
                 <label asp-for="Email" class="control-label"></label>
+                <!-- Campo input para alterar o Email -->
                 <input asp-for="Email" class="form-control" />
+                <!-- Mensagem de erro para o Email -->
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
+            
+            <!-- Botão para submeter o formulário e guardar as alterações -->
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -46,9 +72,11 @@
 </div>
 
 <div>
+    <!-- Link para voltar à lista de utilizadores -->
     <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
+    <!-- Inclusão dos scripts de validação do lado cliente -->
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
