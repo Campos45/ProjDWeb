@@ -9,8 +9,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14e42af0-b416-4e94-a6b6-58f49122598b" name="Changes" comment="">
+    <list default="true" id="14e42af0-b416-4e94-a6b6-58f49122598b" name="Changes" comment="Api atualizada">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/Api/ComentarioApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/ComentarioApiController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/Api/ImagemApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/ImagemApiController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/Api/LocalidadeApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/LocalidadeApiController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/Api/MonumentoApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/MonumentoApiController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/Api/UtilizadorApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/UtilizadorApiController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/Api/VisitaApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/VisitaApiController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,6 +163,7 @@
       <workItem from="1751032766965" duration="12652000" />
       <workItem from="1751918971045" duration="947000" />
       <workItem from="1752257418636" duration="6481000" />
+      <workItem from="1752326392147" duration="10681000" />
     </task>
     <task id="LOCAL-00001" summary="criar monumentos updated v2">
       <option name="closed" value="true" />
@@ -246,7 +253,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752267482748</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Api atualizada">
+      <option name="closed" value="true" />
+      <created>1752340541688</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1752340541688</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -302,6 +317,7 @@
     <MESSAGE value="commit to main" />
     <MESSAGE value="Api a funcionar" />
     <MESSAGE value="Api a funcionar pt2" />
-    <option name="LAST_COMMIT_MESSAGE" value="Api a funcionar pt2" />
+    <MESSAGE value="Api atualizada" />
+    <option name="LAST_COMMIT_MESSAGE" value="Api atualizada" />
   </component>
 </project>
