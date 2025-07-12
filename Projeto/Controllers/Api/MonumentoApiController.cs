@@ -70,6 +70,7 @@ namespace WebApplication1.Controllers.API
 
             // Guarda as alterações na base de dados
             await _context.SaveChangesAsync();
+            
 
             // Retorna a resposta HTTP 201 (Created) com o local da nova entidade criada e a própria entidade
             return CreatedAtAction(nameof(GetMonumento), new { id = monumento.Id }, monumento);
