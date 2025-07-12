@@ -5,8 +5,9 @@ using appMonumentos.Models;
 
 namespace WebApplication1.Controllers.Api
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
+    
     public class VisitaApiController : ControllerBase
     {
         private readonly ApplicationDbContext _context;

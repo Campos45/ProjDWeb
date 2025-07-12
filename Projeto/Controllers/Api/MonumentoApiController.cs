@@ -10,11 +10,11 @@ namespace WebApplication1.Controllers.API
     
     [ApiController]
     [Route("api/[controller]")]
-    public class MonumentosApiController : ControllerBase
+    public class MonumentoApiController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public MonumentosApiController(ApplicationDbContext context)
+        public MonumentoApiController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -34,8 +34,12 @@ namespace WebApplication1.Controllers.API
         public async Task<ActionResult<Monumento>> GetMonumento(int id)
         {
             var monumento = await _context.Monumento
-                .Include(m => m.Localidade)
                 .Include(m => m.Utilizador)
+                .Include(m => m.Localidade)
+                .Include(m => m.Imagens)
+                .ThenInclude(i => i.Comentarios)
+                .Include(m => m.VisitasMonumento)
+                .ThenInclude(v => v.Utilizador)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (monumento == null)

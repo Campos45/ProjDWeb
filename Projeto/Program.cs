@@ -6,7 +6,7 @@ using appMonumentos.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // =======================
-// 🔗 Base de Dados + Identity
+// Base de Dados + Identity
 // =======================
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -22,18 +22,26 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // =======================
-// 🔧 Controladores e Swagger
+// Controladores e Swagger
 // =======================
 builder.Services.AddControllersWithViews(); // MVC Views
-builder.Services.AddControllers();          // API Controllers
+//builder.Services.AddControllers();          // API Controllers
 
 builder.Services.AddEndpointsApiExplorer(); // Necessário para Swagger
 builder.Services.AddSwaggerGen();           // Gera documentação da API
 
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+        options.JsonSerializerOptions.WriteIndented = true;
+    });
+
+
 var app = builder.Build();
 
 // =======================
-// ⚙️ Configuração do Pipeline
+// Configuração do Pipeline
 // =======================
 if (app.Environment.IsDevelopment())
 {
@@ -54,7 +62,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // =======================
-// 🗺️ Mapas de Rotas
+// Mapas de Rotas
 // =======================
 app.MapControllers(); // APIs
 app.MapControllerRoute(
@@ -63,7 +71,7 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 // =======================
-// 🛠️ Criação do admin e da role
+// Criação do admin e da role
 // =======================
 using (var scope = app.Services.CreateScope())
 {
