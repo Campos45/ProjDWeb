@@ -11,7 +11,7 @@
   <component name="ChangeListManager">
     <list default="true" id="14e42af0-b416-4e94-a6b6-58f49122598b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controllers/Api/MonumentoApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/MonumentoApiController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/Api/ComentarioApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/ComentarioApiController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/app.db" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -160,6 +160,12 @@
       <workItem from="1751918971045" duration="947000" />
       <workItem from="1752257418636" duration="6481000" />
       <workItem from="1752326392147" duration="16230000" />
+      <workItem from="1752354163285" duration="959000" />
+      <workItem from="1752355436391" duration="4000" />
+      <workItem from="1752584729274" duration="15594000" />
+      <workItem from="1752790873416" duration="12000" />
+      <workItem from="1756314124668" duration="7050000" />
+      <workItem from="1756736335306" duration="4057000" />
     </task>
     <task id="LOCAL-00001" summary="criar monumentos updated v2">
       <option name="closed" value="true" />
@@ -265,7 +271,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752344248066</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Commit final">
+      <option name="closed" value="true" />
+      <created>1752354190481</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1752354190481</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -323,6 +337,7 @@
     <MESSAGE value="Api a funcionar pt2" />
     <MESSAGE value="Api atualizada" />
     <MESSAGE value="API final - comentada" />
-    <option name="LAST_COMMIT_MESSAGE" value="API final - comentada" />
+    <MESSAGE value="Commit final" />
+    <option name="LAST_COMMIT_MESSAGE" value="Commit final" />
   </component>
 </project>

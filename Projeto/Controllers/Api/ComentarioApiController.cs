@@ -36,14 +36,25 @@ namespace WebApplication1.Controllers.Api
         [HttpGet("{id}")]
         public async Task<ActionResult<Comentario>> GetComentario(int id)
         {
-            // Pesquisa na base de dados o comentário com o ID fornecido
-            var comentario = await _context.Comentario.FindAsync(id);
+            // Pesquisa na base de dados o comentário com os dados relacionados
+            var comentario = await _context.Comentario
+                .Include(c => c.Imagem)
+                .Include(c => c.Utilizador)
+                .FirstOrDefaultAsync(c => c.Id == id);
 
-            // Se o comentário não existir, retorna um código HTTP 404 (Not Found)
+            // Se o comentário não existir, retorna 404 Not Found
             if (comentario == null) return NotFound();
 
-            // Retorna o comentário encontrado
-            return comentario;
+            // Cria um objeto anónimo simplificado só com os campos relevantes
+            var resultado = new
+            {
+                comentario.ComentarioTexto,
+                comentario.Data,
+                comentario.ImagemId,
+                UtilizadorNome = comentario.Utilizador?.Nome
+            };
+
+            return Ok(resultado);
         }
 
         // POST: api/ComentarioApi
