@@ -24,28 +24,39 @@ namespace WebApplication1.Controllers.Api
         // GET: api/Localidade
         // Método que retorna uma lista de todas as localidades
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Localidade>>> GetLocalidades()
+        public async Task<ActionResult<IEnumerable<object>>> GetLocalidades()
         {
-            // Consulta à base de dados para obter todas as localidades
-            return await _context.Localidade.ToListAsync();
+            var localidades = await _context.Localidade
+                .Select(l => new
+                {
+                    l.Id,
+                    l.NomeLocalidade
+                })
+                .ToListAsync();
+
+            return Ok(localidades);
         }
 
         // GET: api/Localidade/{id}
         // Método que obtém uma localidade específica pelo seu ID
         [HttpGet("{id}")]
-        public async Task<ActionResult<Localidade>> GetLocalidade(int id)
+        public async Task<ActionResult<object>> GetLocalidade(int id)
         {
-            // Pesquisa na base de dados a localidade com o ID fornecido
-            var localidade = await _context.Localidade.FindAsync(id);
+            var localidade = await _context.Localidade
+                .Where(l => l.Id == id)
+                .Select(l => new
+                {
+                    l.Id,
+                    l.NomeLocalidade
+                })
+                .FirstOrDefaultAsync();
 
-            // Se a localidade não existir, retorna código HTTP 404 (Not Found)
             if (localidade == null)
             {
                 return NotFound();
             }
 
-            // Retorna a localidade encontrada
-            return localidade;
+            return Ok(localidade);
         }
 
         // POST: api/Localidade

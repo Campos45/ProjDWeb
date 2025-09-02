@@ -24,11 +24,22 @@ namespace WebApplication1.Controllers.Api
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Comentario>>> GetComentarios()
         {
-            // Consulta à base de dados para obter todos os comentários com as respetivas imagens e utilizadores associados
-            return await _context.Comentario
-                .Include(c => c.Imagem)    // Inclui os dados da imagem associada ao comentário
-                .Include(c => c.Utilizador) // Inclui os dados do utilizador que fez o comentário
-                .ToListAsync();            // Executa a consulta e converte para lista
+            
+            // Consulta à base de dados para obter todos os comentários
+            var comentarios = await _context.Comentario
+                .Include(c => c.Imagem)       // Inclui a imagem associada
+                .Include(c => c.Utilizador)   // Inclui o utilizador associado
+                .Select(c => new              // Projeta apenas os campos necessários
+                {
+                    c.Id,
+                    c.ComentarioTexto,
+                    c.Data,
+                    c.ImagemId,
+                    UtilizadorNome = c.Utilizador.Nome
+                })
+                .ToListAsync();
+
+            return Ok(comentarios);
         }
 
         // GET: api/ComentarioApi/{id}
