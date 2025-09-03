@@ -22,25 +22,41 @@ namespace WebApplication1.Controllers.Api
         // GET: api/VisitaApi
         // Retorna a lista de todas as visitas, incluindo os utilizadores e monumentos relacionados
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<VisitaMonumento>>> GetVisitas()
+        public async Task<ActionResult<IEnumerable<object>>> GetVisitas()
         {
-            return await _context.VisitaMonumento
-                .Include(v => v.Utilizador)
-                .Include(v => v.Monumento)
+            var visitas = await _context.VisitaMonumento
+                .Select(v => new
+                {
+                    v.Id,
+                    v.MonumentoId,
+                    v.UtilizadorId
+                })
                 .ToListAsync();
+
+            return Ok(visitas);
         }
 
         // GET: api/VisitaApi/5
         // Retorna uma visita específica pelo seu id
         [HttpGet("{id}")]
-        public async Task<ActionResult<VisitaMonumento>> GetVisita(int id)
+        public async Task<ActionResult<object>> GetVisita(int id)
         {
-            var visita = await _context.VisitaMonumento.FindAsync(id);
+            var visita = await _context.VisitaMonumento
+                .Where(v => v.Id == id)
+                .Select(v => new
+                {
+                    v.Id,
+                    v.MonumentoId,
+                    v.UtilizadorId
+                })
+                .FirstOrDefaultAsync();
 
-            // Se não encontrar a visita, retorna 404 Not Found
-            if (visita == null) return NotFound();
+            if (visita == null)
+            {
+                return NotFound();
+            }
 
-            return visita;
+            return Ok(visita);
         }
 
         // POST: api/VisitaApi

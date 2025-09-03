@@ -11,6 +11,11 @@
   <component name="ChangeListManager">
     <list default="true" id="14e42af0-b416-4e94-a6b6-58f49122598b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/Api/ImagemApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/ImagemApiController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/Api/MonumentoApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/MonumentoApiController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/Api/UtilizadorApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/UtilizadorApiController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/Api/VisitaApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/VisitaApiController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.db-wal" beforeDir="false" afterPath="$PROJECT_DIR$/app.db-wal" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,7 +50,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock://C:/Users/Martim/RiderProjects/ProjDWeb/Projeto/Views/Shared/_Layout.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/Martim/RiderProjects/ProjDWeb/Projeto/Controllers/Api/ComentarioApiController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Views/Utilizador/Login.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -164,6 +169,8 @@
       <workItem from="1752790873416" duration="12000" />
       <workItem from="1756314124668" duration="7050000" />
       <workItem from="1756736335306" duration="4116000" />
+      <workItem from="1756829322798" duration="5258000" />
+      <workItem from="1756908451042" duration="4199000" />
     </task>
     <task id="LOCAL-00001" summary="criar monumentos updated v2">
       <option name="closed" value="true" />
@@ -285,7 +292,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756765077496</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Api- Comentario e localidade updated">
+      <option name="closed" value="true" />
+      <created>1756840146996</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1756840146996</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -345,6 +360,7 @@
     <MESSAGE value="API final - comentada" />
     <MESSAGE value="Commit final" />
     <MESSAGE value="commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="commit" />
+    <MESSAGE value="Api- Comentario e localidade updated" />
+    <option name="LAST_COMMIT_MESSAGE" value="Api- Comentario e localidade updated" />
   </component>
 </project>

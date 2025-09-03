@@ -26,39 +26,54 @@ namespace WebApplication1.Controllers.API
         // GET: api/monumentos
         // Método que retorna uma lista de todos os monumentos
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Monumento>>> GetMonumentos()
+        public async Task<ActionResult<IEnumerable<object>>> GetMonumentos()
         {
-            // Consulta à base de dados para obter todos os monumentos incluindo Localidade e Utilizador
-            return await _context.Monumento
-                .Include(m => m.Localidade)   // Inclui dados da localidade associada a cada monumento
-                .Include(m => m.Utilizador)   // Inclui dados do utilizador criador de cada monumento
-                .ToListAsync();               // Executa a consulta e devolve lista
+            var monumentos = await _context.Monumento
+                .Select(m => new
+                {
+                    m.Id,
+                    m.Designacao,
+                    m.Endereco,
+                    m.Coordenadas,
+                    m.EpocaConstrucao,
+                    m.Descricao,
+                    m.UtilizadorId,
+                    m.LocalidadeId
+                })
+                .ToListAsync();
+
+            return Ok(monumentos);
         }
 
         // GET: api/monumentos/5
         // Método que obtém um monumento específico pelo seu ID
+        // GET: api/MonumentoApi/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Monumento>> GetMonumento(int id)
+        public async Task<ActionResult<object>> GetMonumento(int id)
         {
-            // Pesquisa na base de dados o monumento com o ID fornecido, incluindo várias entidades relacionadas
             var monumento = await _context.Monumento
-                .Include(m => m.Utilizador)                    // Inclui o utilizador criador
-                .Include(m => m.Localidade)                    // Inclui a localidade do monumento
-                .Include(m => m.Imagens)                       // Inclui as imagens associadas ao monumento
-                .ThenInclude(i => i.Comentarios)               // Para cada imagem, inclui os comentários associados
-                .Include(m => m.VisitasMonumento)              // Inclui as visitas ao monumento
-                .ThenInclude(v => v.Utilizador)                 // Para cada visita, inclui o utilizador que visitou
-                .FirstOrDefaultAsync(m => m.Id == id);          // Executa a consulta e obtém o monumento com o ID indicado
+                .Where(m => m.Id == id)
+                .Select(m => new
+                {
+                    m.Id,
+                    m.Designacao,
+                    m.Endereco,
+                    m.Coordenadas,
+                    m.EpocaConstrucao,
+                    m.Descricao,
+                    m.UtilizadorId,
+                    m.LocalidadeId
+                })
+                .FirstOrDefaultAsync();
 
-            // Se não existir monumento com esse ID, retorna 404 Not Found
             if (monumento == null)
             {
                 return NotFound();
             }
 
-            // Retorna o monumento encontrado com todas as entidades relacionadas carregadas
-            return monumento;
+            return Ok(monumento);
         }
+
 
         // POST: api/monumentos
         // Método para adicionar um novo monumento

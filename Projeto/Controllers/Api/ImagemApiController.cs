@@ -24,30 +24,45 @@ namespace WebApplication1.Controllers.Api
         // GET: api/ImagemApi
         // Método que retorna uma lista de todas as imagens
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Imagem>>> GetImagens()
+        public async Task<ActionResult<IEnumerable<object>>> GetImagens()
         {
-            // Consulta à base de dados para obter todas as imagens com as respetivas informações do utilizador e monumento associados
-            return await _context.Imagem
-                .Include(i => i.Utilizador)  // Inclui os dados do utilizador que inseriu a imagem
-                .Include(i => i.Monumento)  // Inclui os dados do monumento associado à imagem
-                .ToListAsync();              // Executa a consulta e converte para lista
+            var imagens = await _context.Imagem
+                .Select(i => new
+                {
+                    i.Id,
+                    i.NomeImagem,
+                    i.MonumentoId,
+                    i.UtilizadorId,
+                    i.IsPrincipal
+                })
+                .ToListAsync();
+
+            return Ok(imagens);
         }
 
         // GET: api/ImagemApi/{id}
         // Método que obtém uma imagem específica pelo seu ID
         [HttpGet("{id}")]
-        public async Task<ActionResult<Imagem>> GetImagem(int id)
+        public async Task<ActionResult<object>> GetImagem(int id)
         {
-            // Pesquisa na base de dados a imagem com o ID fornecido, incluindo os comentários associados
             var imagem = await _context.Imagem
-                .Include(i => i.Comentarios)           // Inclui a coleção de comentários relacionados a esta imagem
-                .FirstOrDefaultAsync(i => i.Id == id); // Encontra a primeira imagem com o ID correspondente
+                .Where(i => i.Id == id)
+                .Select(i => new
+                {
+                    i.Id,
+                    i.NomeImagem,
+                    i.MonumentoId,
+                    i.UtilizadorId,
+                    i.IsPrincipal
+                })
+                .FirstOrDefaultAsync();
 
-            // Se a imagem não existir, retorna um código HTTP 404 (Not Found)
-            if (imagem == null) return NotFound();
+            if (imagem == null)
+            {
+                return NotFound();
+            }
 
-            // Retorna a imagem encontrada
-            return imagem;
+            return Ok(imagem);
         }
 
         // POST: api/ImagemApi

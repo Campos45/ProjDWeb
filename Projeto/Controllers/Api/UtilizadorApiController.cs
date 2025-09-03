@@ -24,24 +24,47 @@ namespace WebApplication1.Controllers.Api
         // GET: api/UtilizadorApi
         // Método que retorna a lista de todos os utilizadores
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Utilizador>>> GetUtilizadores()
+        public async Task<ActionResult<IEnumerable<object>>> GetUtilizadores()
         {
-            return await _context.Utilizador.ToListAsync();
+            var utilizadores = await _context.Utilizador
+                .Select(u => new
+                {
+                    u.Id,
+                    u.Username,
+                    u.Nome,
+                    u.LocalidadeUtilizador,
+                    u.Email
+                })
+                .ToListAsync();
+
+            return Ok(utilizadores);
         }
 
         // GET: api/UtilizadorApi/5
         // Método que retorna um utilizador específico pelo seu ID
         [HttpGet("{id}")]
-        public async Task<ActionResult<Utilizador>> GetUtilizador(int id)
+        public async Task<ActionResult<object>> GetUtilizador(int id)
         {
-            var utilizador = await _context.Utilizador.FindAsync(id);
+            var utilizador = await _context.Utilizador
+                .Where(u => u.Id == id)
+                .Select(u => new
+                {
+                    u.Id,
+                    u.Username,
+                    u.Nome,
+                    u.LocalidadeUtilizador,
+                    u.Email
+                })
+                .FirstOrDefaultAsync();
 
-            // Se não for encontrado, retorna 404 Not Found
-            if (utilizador == null) return NotFound();
+            if (utilizador == null)
+            {
+                return NotFound();
+            }
 
-            // Retorna o utilizador encontrado
-            return utilizador;
+            return Ok(utilizador);
         }
+
 
         // POST: api/UtilizadorApi
         // Método para criar um novo utilizador
