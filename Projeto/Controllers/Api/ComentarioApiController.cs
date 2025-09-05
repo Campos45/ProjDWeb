@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;         
 using Microsoft.EntityFrameworkCore;     
 using WebApplication1.Data;               
-using appMonumentos.Models;               
+using appMonumentos.Models;
+using appMonumentos.Models.Dto;
 
 namespace WebApplication1.Controllers.Api
 {
@@ -22,50 +23,44 @@ namespace WebApplication1.Controllers.Api
         // GET: api/ComentarioApi
         // Método que retorna uma lista de todos os comentários
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Comentario>>> GetComentarios()
+        public async Task<ActionResult<IEnumerable<ComentarioDto>>> GetComentarios()
         {
-            
-            // Consulta à base de dados para obter todos os comentários
-            var comentarios = await _context.Comentario
-                .Include(c => c.Imagem)       // Inclui a imagem associada
-                .Include(c => c.Utilizador)   // Inclui o utilizador associado
-                .Select(c => new              // Projeta apenas os campos necessários
+            return await _context.Comentario
+                .Include(c => c.Utilizador)
+                .Select(c => new ComentarioDto
                 {
-                    c.Id,
-                    c.ComentarioTexto,
-                    c.Data,
-                    c.ImagemId,
-                    UtilizadorNome = c.Utilizador.Nome
+                    Id = c.Id,
+                    ComentarioTexto = c.ComentarioTexto,
+                    Data = c.Data,
+                    ImagemId = c.ImagemId,
+                    UtilizadorId = c.UtilizadorId,
+                    NomeAutor = c.Utilizador.Nome
                 })
                 .ToListAsync();
-
-            return Ok(comentarios);
         }
 
         // GET: api/ComentarioApi/{id}
         // Método que obtém um comentário específico pelo seu ID
         [HttpGet("{id}")]
-        public async Task<ActionResult<Comentario>> GetComentario(int id)
+        public async Task<ActionResult<ComentarioDto>> GetComentario(int id)
         {
-            // Pesquisa na base de dados o comentário com os dados relacionados
             var comentario = await _context.Comentario
-                .Include(c => c.Imagem)
                 .Include(c => c.Utilizador)
-                .FirstOrDefaultAsync(c => c.Id == id);
+                .Where(c => c.Id == id)
+                .Select(c => new ComentarioDto
+                {
+                    Id = c.Id,
+                    ComentarioTexto = c.ComentarioTexto,
+                    Data = c.Data,
+                    ImagemId = c.ImagemId,
+                    UtilizadorId = c.UtilizadorId,
+                    NomeAutor = c.Utilizador.Nome
+                })
+                .FirstOrDefaultAsync();
 
-            // Se o comentário não existir, retorna 404 Not Found
             if (comentario == null) return NotFound();
 
-            // Cria um objeto anónimo simplificado só com os campos relevantes
-            var resultado = new
-            {
-                comentario.ComentarioTexto,
-                comentario.Data,
-                comentario.ImagemId,
-                UtilizadorNome = comentario.Utilizador?.Nome
-            };
-
-            return Ok(resultado);
+            return comentario;
         }
 
         // POST: api/ComentarioApi
