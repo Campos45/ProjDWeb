@@ -1,0 +1,34 @@
+@{
+    // Define o título da página
+    ViewData["Title"] = "Login";
+}
+
+<h2>Login</h2>
+
+<!-- Formulário para envio dos dados de login -->
+<form asp-action="Login" method="post">
+    <div class="form-group">
+        <!-- Label para o campo username -->
+        <label for="username">Username</label>
+        <!-- Campo de texto para o username, obrigatório -->
+        <input name="username" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <!-- Label para o campo password -->
+        <label for="password">Password</label>
+        <!-- Campo para password, tipo password para esconder texto, obrigatório -->
+        <input name="password" type="password" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <!-- Botão para submeter o formulário -->
+        <input type="submit" value="Entrar" class="btn btn-primary" />
+    </div>
+</form>
+
+<!-- Mostra mensagens de erro de validação, se existirem -->
+<div asp-validation-summary="All" class="text-danger"></div>
+
+@section Scripts {
+    <!-- Inclusão dos scripts de validação do lado cliente -->
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
