@@ -1,13 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;          
 using Microsoft.EntityFrameworkCore;    
 using WebApplication1.Data;              
-using appMonumentos.Models;               
+using appMonumentos.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication1.Controllers.Api
 {
     // Indica que este controlador é usado para API REST
     [ApiController]
-
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    
     // Define a rota base da API para este controlador: "api/ImagemApi"
     [Route("api/[controller]")]
     public class ImagemApiController : ControllerBase  

@@ -2,11 +2,14 @@
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using appMonumentos.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication1.Controllers.Api
 {
     // Define que esta classe é um API Controller e usa a rota padrão "api/[controller]"
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     public class VisitaApiController : ControllerBase
     {

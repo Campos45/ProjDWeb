@@ -3,13 +3,15 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;                
 using appMonumentos.Models;                
 using System.Collections.Generic;        
-using System.Threading.Tasks;             
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication1.Controllers.API
 {
     // Indica que este controlador é usado para API REST
     [ApiController]
-
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     // Define a rota base da API para este controlador: "api/MonumentoApi"
     [Route("api/[controller]")]
     public class MonumentoApiController : ControllerBase  

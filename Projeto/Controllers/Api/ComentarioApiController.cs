@@ -3,12 +3,16 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;               
 using appMonumentos.Models;
 using appMonumentos.Models.Dto;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication1.Controllers.Api
 {
     // Define a rota base da API para este controlador: "api/ComentarioApi"
     [Route("api/[controller]")]
     [ApiController]   // Indica que este controlador é usado para API REST
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
     public class ComentarioApiController : ControllerBase  
     {
         // base de dados para aceder aos dados
@@ -22,6 +26,7 @@ namespace WebApplication1.Controllers.Api
 
         // GET: api/ComentarioApi
         // Método que retorna uma lista de todos os comentários
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ComentarioDto>>> GetComentarios()
         {
@@ -41,6 +46,7 @@ namespace WebApplication1.Controllers.Api
 
         // GET: api/ComentarioApi/{id}
         // Método que obtém um comentário específico pelo seu ID
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<ComentarioDto>> GetComentario(int id)
         {
@@ -65,6 +71,7 @@ namespace WebApplication1.Controllers.Api
 
         // POST: api/ComentarioApi
         // Método para adicionar um novo comentário
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Comentario>> PostComentario(Comentario comentario)
         {
@@ -83,6 +90,7 @@ namespace WebApplication1.Controllers.Api
 
         // DELETE: api/ComentarioApi/{id}
         // Método para apagar um comentário pelo seu ID
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteComentario(int id)
         {

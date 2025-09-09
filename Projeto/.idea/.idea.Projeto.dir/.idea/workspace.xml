@@ -10,15 +10,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="14e42af0-b416-4e94-a6b6-58f49122598b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Models/outros/LoginViewModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Models/outros/RegisterViewModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Views/Utilizador/Login1.cshtml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Views/Utilizador/Register.cshtml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Controllers/Api/AuthApiController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controllers/UtilizadorController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/UtilizadorController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/Shared/_LoginPartial.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Shared/_LoginPartial.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/Utilizador/Login.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Utilizador/Login.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/Api/ComentarioApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/ComentarioApiController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Projeto.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/app.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
