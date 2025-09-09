@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;    
 using WebApplication1.Data;              
 using appMonumentos.Models;
+using appMonumentos.Models.Dtos;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 
@@ -71,17 +72,22 @@ namespace WebApplication1.Controllers.Api
         // POST: api/ImagemApi
         // Método para adicionar uma nova imagem
         [HttpPost]
-        public async Task<ActionResult<Imagem>> PostImagem(Imagem imagem)
+        public async Task<ActionResult<ImagemCreateDto>> PostImagem([FromBody] ImagemCreateDto dto)
         {
-            // Adiciona a nova imagem ao contexto da base de dados
-            _context.Imagem.Add(imagem);
+            var imagem = new Imagem
+            {
+                NomeImagem = dto.NomeImagem,
+                MonumentoId = dto.MonumentoId,
+                UtilizadorId = dto.UtilizadorId,
+                IsPrincipal = dto.IsPrincipal
+            };
 
-            // Guarda as alterações na base de dados 
+            _context.Imagem.Add(imagem);
             await _context.SaveChangesAsync();
 
-            // Retorna a resposta HTTP 201 (Created) com o local da nova imagem criada e a própria imagem
-            return CreatedAtAction(nameof(GetImagem), new { id = imagem.Id }, imagem);
+            return CreatedAtAction(nameof(GetImagem), new { id = imagem.Id }, dto);
         }
+
 
         // DELETE: api/ImagemApi/{id}
         // Método para apagar uma imagem pelo seu ID

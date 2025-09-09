@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using appMonumentos.Models;
+using appMonumentos.Models.Dtos;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 
@@ -65,14 +66,39 @@ namespace WebApplication1.Controllers.Api
         // POST: api/VisitaApi
         // Adiciona uma nova visita à base de dados
         [HttpPost]
-        public async Task<ActionResult<VisitaMonumento>> PostVisita(VisitaMonumento visita)
+        public async Task<ActionResult<VisitaCreateDto>> PostVisita([FromBody] VisitaCreateDto dto)
         {
+            var visita = new VisitaMonumento
+            {
+                MonumentoId = dto.MonumentoId,
+                UtilizadorId = dto.UtilizadorId
+            };
+
             _context.VisitaMonumento.Add(visita);
             await _context.SaveChangesAsync();
 
-            // Retorna 201 Created com o local da nova visita criada
-            return CreatedAtAction(nameof(GetVisita), new { id = visita.Id }, visita);
+            return CreatedAtAction(nameof(GetVisita), new { id = visita.Id }, dto);
         }
+        
+        //Put
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutVisita(int id, [FromBody] VisitaUpdateDto dto)
+        {
+            if (id != dto.Id) return BadRequest();
+
+            var visita = await _context.VisitaMonumento.FindAsync(id);
+            if (visita == null) return NotFound();
+
+            visita.MonumentoId = dto.MonumentoId;
+            visita.UtilizadorId = dto.UtilizadorId;
+
+            _context.Entry(visita).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+
 
         // DELETE: api/VisitaApi/5
         // Remove uma visita pelo seu id

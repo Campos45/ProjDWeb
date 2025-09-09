@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;      
 using WebApplication1.Data;                
 using appMonumentos.Models;
+using appMonumentos.Models.Dtos;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 
@@ -71,35 +72,44 @@ namespace WebApplication1.Controllers.Api
         // POST: api/UtilizadorApi
         // Método para criar um novo utilizador
         [HttpPost]
-        public async Task<ActionResult<Utilizador>> PostUtilizador(Utilizador utilizador)
+        public async Task<ActionResult<UtilizadorCreateDto>> PostUtilizador([FromBody] UtilizadorCreateDto dto)
         {
-            // Adiciona o novo utilizador ao contexto
-            _context.Utilizador.Add(utilizador);
+            var utilizador = new Utilizador
+            {
+                Username = dto.Username,
+                Nome = dto.Nome,
+                LocalidadeUtilizador = dto.LocalidadeUtilizador,
+                Email = dto.Email
+            };
 
-            // Guarda as alterações na base de dados
+            _context.Utilizador.Add(utilizador);
             await _context.SaveChangesAsync();
 
-            // Retorna 201 Created, com a rota para obter o novo utilizador criado
-            return CreatedAtAction(nameof(GetUtilizador), new { id = utilizador.Id }, utilizador);
+            return CreatedAtAction(nameof(GetUtilizador), new { id = utilizador.Id }, dto);
         }
+
 
         // PUT: api/UtilizadorApi/5
         // Método para atualizar um utilizador existente
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUtilizador(int id, Utilizador utilizador)
+        public async Task<IActionResult> PutUtilizador(int id, [FromBody] UtilizadorUpdateDto dto)
         {
-            // Se o ID do URL for diferente do ID do utilizador recebido, retorna 400 Bad Request
-            if (id != utilizador.Id) return BadRequest();
+            if (id != dto.Id) return BadRequest();
 
-            // Marca a entidade como modificada para atualizar na base de dados
+            var utilizador = await _context.Utilizador.FindAsync(id);
+            if (utilizador == null) return NotFound();
+
+            utilizador.Username = dto.Username;
+            utilizador.Nome = dto.Nome;
+            utilizador.LocalidadeUtilizador = dto.LocalidadeUtilizador;
+            utilizador.Email = dto.Email;
+
             _context.Entry(utilizador).State = EntityState.Modified;
-
-            // Guarda as alterações
             await _context.SaveChangesAsync();
 
-            // Retorna 204 No Content indicando que a atualização ocorreu com sucesso
             return NoContent();
         }
+
 
         // DELETE: api/UtilizadorApi/5
         // Método para apagar um utilizador pelo seu ID
