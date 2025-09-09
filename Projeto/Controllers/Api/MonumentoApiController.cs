@@ -4,6 +4,7 @@ using WebApplication1.Data;
 using appMonumentos.Models;                
 using System.Collections.Generic;        
 using System.Threading.Tasks;
+using appMonumentos.Models.Dtos;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 
@@ -80,52 +81,50 @@ namespace WebApplication1.Controllers.API
         // POST: api/monumentos
         // Método para adicionar um novo monumento
         [HttpPost]
-        public async Task<ActionResult<Monumento>> PostMonumento(Monumento monumento)
+        public async Task<ActionResult<MonumentoCreateDto>> PostMonumento([FromBody] MonumentoCreateDto dto)
         {
-            // Adiciona o novo monumento a base de dados
+            var monumento = new Monumento
+            {
+                Designacao = dto.Designacao,
+                Endereco = dto.Endereco,
+                Coordenadas = dto.Coordenadas,
+                EpocaConstrucao = dto.EpocaConstrucao,
+                Descricao = dto.Descricao,
+                UtilizadorId = dto.UtilizadorId,
+                LocalidadeId = dto.LocalidadeId
+            };
+
             _context.Monumento.Add(monumento);
-
-            // Guarda as alterações na base de dados
             await _context.SaveChangesAsync();
-            
 
-            // Retorna a resposta HTTP 201 (Created) com o local da nova entidade criada e a própria entidade
-            return CreatedAtAction(nameof(GetMonumento), new { id = monumento.Id }, monumento);
+            return CreatedAtAction(nameof(GetMonumento), new { id = monumento.Id }, dto);
         }
+
 
         // PUT: api/monumentos/5
         // Método para atualizar um monumento existente pelo seu ID
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMonumento(int id, Monumento monumento)
+        public async Task<IActionResult> PutMonumento(int id, [FromBody] MonumentoUpdateDto dto)
         {
-            // Se o ID do URL for diferente do ID do objeto monumento enviado, retorna 400 Bad Request
-            if (id != monumento.Id)
-            {
-                return BadRequest();
-            }
+            if (id != dto.Id) return BadRequest();
 
-            // Marca a entidade como modificada para que seja atualizada na base de dados
+            var monumento = await _context.Monumento.FindAsync(id);
+            if (monumento == null) return NotFound();
+
+            monumento.Designacao = dto.Designacao;
+            monumento.Endereco = dto.Endereco;
+            monumento.Coordenadas = dto.Coordenadas;
+            monumento.EpocaConstrucao = dto.EpocaConstrucao;
+            monumento.Descricao = dto.Descricao;
+            monumento.UtilizadorId = dto.UtilizadorId;
+            monumento.LocalidadeId = dto.LocalidadeId;
+
             _context.Entry(monumento).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
 
-            try
-            {
-                // Tenta guardar as alterações na base de dados 
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                // Se o monumento não existir na base de dados, retorna 404 Not Found
-                if (!_context.Monumento.Any(e => e.Id == id))
-                {
-                    return NotFound();
-                }
-                // Se for outro erro de concorrência, propaga a exceção
-                throw;
-            }
-
-            // Retorna 204 No Content indicando que a atualização foi bem-sucedida, sem conteúdo a devolver
             return NoContent();
         }
+
 
         // DELETE: api/monumentos/5
         // Método para apagar um monumento pelo seu ID

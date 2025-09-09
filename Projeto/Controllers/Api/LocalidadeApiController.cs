@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;     
 using WebApplication1.Data;               
 using appMonumentos.Models;
+using appMonumentos.Models.Dtos;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 
@@ -64,48 +65,35 @@ namespace WebApplication1.Controllers.Api
         // POST: api/Localidade
         // Método para adicionar uma nova localidade
         [HttpPost]
-        public async Task<ActionResult<Localidade>> PostLocalidade(Localidade localidade)
+        public async Task<ActionResult<LocalidadeCreateDto>> PostLocalidade([FromBody] LocalidadeCreateDto dto)
         {
-            // Adiciona a nova localidade ao contexto da base de dados
-            _context.Localidade.Add(localidade);
+            var localidade = new Localidade { NomeLocalidade = dto.NomeLocalidade };
 
-            // Guarda as alterações na base de dados 
+            _context.Localidade.Add(localidade);
             await _context.SaveChangesAsync();
 
-            // Retorna a resposta HTTP 201 (Created) com o local da nova localidade criada e a própria localidade
-            return CreatedAtAction(nameof(GetLocalidade), new { id = localidade.Id }, localidade);
+            return CreatedAtAction(nameof(GetLocalidade), new { id = localidade.Id }, dto);
         }
+
 
         // PUT: api/Localidade/{id}
         // Método para atualizar uma localidade existente pelo seu ID
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutLocalidade(int id, Localidade localidade)
+        public async Task<IActionResult> PutLocalidade(int id, [FromBody] LocalidadeUpdateDto dto)
         {
-            // Se o ID do URL for diferente do ID do objeto localidade enviado, retorna 400 Bad Request
-            if (id != localidade.Id)
-                return BadRequest();
+            if (id != dto.Id) return BadRequest();
 
-            // Marca a entidade como modificada para que seja atualizada na base de dados
+            var localidade = await _context.Localidade.FindAsync(id);
+            if (localidade == null) return NotFound();
+
+            localidade.NomeLocalidade = dto.NomeLocalidade;
+
             _context.Entry(localidade).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
 
-            try
-            {
-                // Tenta guardar as alterações na base de dados
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                // Se a localidade não existir na base de dados, retorna 404 Not Found
-                if (!_context.Localidade.Any(e => e.Id == id))
-                    return NotFound();
-                else
-                    // Se for outro erro, propaga a exceção
-                    throw;
-            }
-
-            // Retorna 204 No Content indicando que a atualização foi bem-sucedida, sem conteúdo a devolver
             return NoContent();
         }
+
 
         // DELETE: api/Localidade/{id}
         // Método para apagar uma localidade pelo seu ID

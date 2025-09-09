@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;         
+﻿using appMonumentos.Models.Dtos;
+using Microsoft.AspNetCore.Mvc;         
 using Microsoft.EntityFrameworkCore;     
 using WebApplication1.Data;               
 using appMonumentos.Models;
-using appMonumentos.Models.Dto;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 
@@ -26,7 +26,6 @@ namespace WebApplication1.Controllers.Api
 
         // GET: api/ComentarioApi
         // Método que retorna uma lista de todos os comentários
-        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ComentarioDto>>> GetComentarios()
         {
@@ -46,7 +45,6 @@ namespace WebApplication1.Controllers.Api
 
         // GET: api/ComentarioApi/{id}
         // Método que obtém um comentário específico pelo seu ID
-        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<ComentarioDto>> GetComentario(int id)
         {
@@ -71,26 +69,59 @@ namespace WebApplication1.Controllers.Api
 
         // POST: api/ComentarioApi
         // Método para adicionar um novo comentário
-        [Authorize]
         [HttpPost]
-        public async Task<ActionResult<Comentario>> PostComentario(Comentario comentario)
+        public async Task<ActionResult<ComentarioCreateDto>> PostComentario([FromBody] ComentarioCreateDto dto)
         {
-            // Define a data do comentário como o momento atual
-            comentario.Data = DateTime.Now;
+            var comentario = new Comentario
+            {
+                ComentarioTexto = dto.ComentarioTexto,
+                Data = dto.Data,
+                ImagemId = dto.ImagemId,
+                UtilizadorId = dto.UtilizadorId
+            };
 
-            // Adiciona o novo comentário a base de dados
             _context.Comentario.Add(comentario);
-
-            // Guarda as alterações na base de dados 
             await _context.SaveChangesAsync();
 
-            // Retorna a resposta HTTP 201 (Created) com o local do novo comentário criado e o próprio comentário
-            return CreatedAtAction(nameof(GetComentario), new { id = comentario.Id }, comentario);
+            // resposta minimal, apenas com o que interessa
+            var responseDto = new ComentarioCreateDto
+            {
+                ComentarioTexto = comentario.ComentarioTexto,
+                Data = comentario.Data,
+                ImagemId = comentario.ImagemId,
+                UtilizadorId = comentario.UtilizadorId
+            };
+
+            return CreatedAtAction(nameof(GetComentario), new { id = comentario.Id }, responseDto);
         }
 
+
+        // PUT: api/ComentarioApi
+        // Método para editar um comentário
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutComentario(int id, [FromBody] ComentarioUpdateDto dto)
+        {
+            if (id != dto.Id)
+                return BadRequest();
+
+            var comentario = await _context.Comentario.FindAsync(id);
+            if (comentario == null)
+                return NotFound();
+
+            // Atualizar apenas os campos permitidos
+            comentario.ComentarioTexto = dto.ComentarioTexto;
+            comentario.Data = dto.Data;
+
+            _context.Entry(comentario).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        
         // DELETE: api/ComentarioApi/{id}
         // Método para apagar um comentário pelo seu ID
-        [Authorize]
+        
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteComentario(int id)
         {

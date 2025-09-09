@@ -9,15 +9,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14e42af0-b416-4e94-a6b6-58f49122598b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Controllers/Api/AuthApiController.cs" afterDir="false" />
+    <list default="true" id="14e42af0-b416-4e94-a6b6-58f49122598b" name="Changes" comment="Autenticação API">
+      <change afterPath="$PROJECT_DIR$/Models/DTO/LocalidadeDTO.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/DTO/MonumentoDTO.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controllers/Api/ComentarioApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/ComentarioApiController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/Api/LocalidadeApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/LocalidadeApiController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/Api/MonumentoApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/MonumentoApiController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/DTO/ComentarioDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/DTO/ComentarioDTO.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Projeto.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/app.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.db-wal" beforeDir="false" afterPath="$PROJECT_DIR$/app.db-wal" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -313,7 +315,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756919022292</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Autenticação API">
+      <option name="closed" value="true" />
+      <created>1757432947783</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1757432947783</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -380,6 +390,7 @@
     <MESSAGE value="commit" />
     <MESSAGE value="Api- Comentario e localidade updated" />
     <MESSAGE value="APIs updated" />
-    <option name="LAST_COMMIT_MESSAGE" value="APIs updated" />
+    <MESSAGE value="Autenticação API" />
+    <option name="LAST_COMMIT_MESSAGE" value="Autenticação API" />
   </component>
 </project>
