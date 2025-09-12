@@ -13,7 +13,6 @@ namespace WebApplication1.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        // Construtor que recebe o contexto da base de dados por injeção de dependência
         public LocalidadeController(ApplicationDbContext context)
         {
             _context = context;
@@ -76,7 +75,10 @@ namespace WebApplication1.Controllers
         {
             if (id == null) return NotFound();
 
-            var localidade = await _context.Localidade.FindAsync(id);
+            var localidade = await _context.Localidade
+                .Include(l => l.Utilizador)
+                .FirstOrDefaultAsync(l => l.Id == id);
+
             if (localidade == null) return NotFound();
 
             var username = User.Identity?.Name;
@@ -94,9 +96,12 @@ namespace WebApplication1.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NomeLocalidade,UtilizadorId")] Localidade localidade)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,NomeLocalidade")] Localidade localidadeEditada)
         {
-            if (id != localidade.Id) return NotFound();
+            if (!ModelState.IsValid) return View(localidadeEditada);
+
+            var localidade = await _context.Localidade.FindAsync(id);
+            if (localidade == null) return NotFound();
 
             var username = User.Identity?.Name;
             var utilizador = await _context.Utilizador
@@ -106,7 +111,8 @@ namespace WebApplication1.Controllers
             if (!isAdmin && localidade.UtilizadorId != utilizador?.Id)
                 return Forbid();
 
-            if (!ModelState.IsValid) return View(localidade);
+            // Só atualiza o NomeLocalidade
+            localidade.NomeLocalidade = localidadeEditada.NomeLocalidade;
 
             try
             {

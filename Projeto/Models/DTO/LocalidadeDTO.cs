@@ -3,6 +3,8 @@
 public class LocalidadeCreateDto
 {
     public string NomeLocalidade { get; set; }
+    public int UtilizadorId { get; set; }
+
 }
 
 public class LocalidadeUpdateDto : LocalidadeCreateDto

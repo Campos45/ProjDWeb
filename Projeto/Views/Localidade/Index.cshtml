@@ -1,48 +1,49 @@
-﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
-@using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor
-@model IEnumerable<appMonumentos.Models.Localidade>
+﻿@model IEnumerable<appMonumentos.Models.Localidade>
+@using System.Security.Claims
 
 @{
-    // Define o título da página
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Localidades";
 }
 
-<h1>Index</h1>
+<h1>Localidades</h1>
 
 <p>
-    <!-- Link para criar uma nova localidade -->
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success">Criar nova localidade</a>
 </p>
 
 <table class="table">
     <thead>
     <tr>
-        <!-- Cabeçalho da coluna para o nome da localidade -->
-        <th>
-            @Html.DisplayNameFor(model => model.NomeLocalidade)
-        </th>
-        <th></th> <!-- Coluna para os botões de ação -->
+        <th>@Html.DisplayNameFor(model => model.NomeLocalidade)</th>
+        <th>Criado por</th>
+        <th>Ações</th>
     </tr>
     </thead>
     <tbody>
     @foreach (var item in Model)
     {
         <tr>
-            <!-- Mostra o nome da localidade -->
+            <td>@item.NomeLocalidade</td>
+            <td>@item.Utilizador?.Username</td>
             <td>
-                @Html.DisplayFor(modelItem => item.NomeLocalidade)
-            </td>
-            <td>
-                <!-- Botão para editar -->
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Edit</a>
-                |
-                <!-- Botão para detalhes -->
-                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a>
-                @* Só admins podem eliminar *@
-                @if (User.IsInRole("Admin"))
+                <!-- Edit só aparece ao dono OU admin -->
+                @if (User.Identity.IsAuthenticated &&
+                     (User.IsInRole("Admin") || User.Identity.Name == item.Utilizador?.Username))
                 {
-                    <text> | <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a></text>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a>
+                    <text> | </text>
                 }
+
+                <!-- Delete só aparece ao dono OU admin -->
+                @if (User.Identity.IsAuthenticated &&
+                     (User.IsInRole("Admin") || User.Identity.Name == item.Utilizador?.Username))
+                {
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                    <text> | </text>
+                }
+
+                <!-- Details aparece sempre -->
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a>
             </td>
         </tr>
     }

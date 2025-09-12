@@ -65,15 +65,31 @@ namespace WebApplication1.Controllers.Api
         // POST: api/Localidade
         // Método para adicionar uma nova localidade
         [HttpPost]
-        public async Task<ActionResult<LocalidadeCreateDto>> PostLocalidade([FromBody] LocalidadeCreateDto dto)
+        public async Task<ActionResult> PostLocalidade([FromBody] LocalidadeCreateDto dto)
         {
-            var localidade = new Localidade { NomeLocalidade = dto.NomeLocalidade };
+            var utilizador = await _context.Utilizador.FindAsync(dto.UtilizadorId);
+            if (utilizador == null)
+            {
+                return BadRequest("Utilizador não encontrado.");
+            }
+
+            var localidade = new Localidade
+            {
+                NomeLocalidade = dto.NomeLocalidade,
+                UtilizadorId = dto.UtilizadorId
+            };
 
             _context.Localidade.Add(localidade);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetLocalidade), new { id = localidade.Id }, dto);
+            return CreatedAtAction(nameof(GetLocalidade), new { id = localidade.Id }, new
+            {
+                localidade.Id,
+                localidade.NomeLocalidade,
+                localidade.UtilizadorId
+            });
         }
+
 
 
         // PUT: api/Localidade/{id}
