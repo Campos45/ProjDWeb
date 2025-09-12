@@ -18,9 +18,8 @@ namespace WebApplication1.Controllers
     public class MonumentoController : Controller
     {
         private readonly ApplicationDbContext _context; // contexto da BD
-        private readonly IWebHostEnvironment _webHostEnvironment; // ambiente para aceder a pastas wwwroot
+        private readonly IWebHostEnvironment _webHostEnvironment; // para aceder a wwwroot
 
-        // Construtor para injeção de dependências
         public MonumentoController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
@@ -28,7 +27,7 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Monumento
-        // Lista todos os monumentos, incluindo os dados da localidade e do utilizador que criou
+        // Lista todos os monumentos (inclui Localidade e Utilizador para mostrar na view)
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Monumento
@@ -38,7 +37,7 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Monumento/Details/5
-        // Mostra os detalhes de um monumento, incluindo localidade, utilizador, imagens com comentários e visitas
+        // Mostra detalhes (imagens, comentários e visitas também)
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
@@ -59,38 +58,55 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Monumento/Create
-        // Formulário para criar um novo monumento (só para utilizadores autenticados)
+        // Apenas utilizadores autenticados podem criar
         [Authorize]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            // Prepara as listas dropdown para selecionar localidade e utilizador
+            // Lista de localidade para dropdown
             ViewData["LocalidadeId"] = new SelectList(_context.Localidade, "Id", "NomeLocalidade");
-            ViewData["UtilizadorId"] = new SelectList(_context.Utilizador, "Id", "Nome");
+
+            // Obter utilizador autenticado para mostrar o nome na view
+            var username = User.Identity?.Name;
+            var utilizador = await _context.Utilizador.FirstOrDefaultAsync(u => u.Username == username);
+
+            // ViewBag com nome e id do utilizador autenticado (nome a mostrar)
+            ViewBag.CurrentUserName = utilizador?.Nome ?? username ?? "Desconhecido";
+            ViewBag.CurrentUserId = utilizador?.Id ?? 0;
+
             return View();
         }
 
         // POST: Monumento/Create
-        // Recebe os dados do formulário para criar um monumento novo (valida modelo)
+        // associa o monumento ao utilizador autenticado (não permite escolher outro utilizador)
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create([Bind("Id,Designacao,Endereco,Coordenadas,EpocaConstrucao,Descricao,UtilizadorId,LocalidadeId")] Monumento monumento)
+        public async Task<IActionResult> Create([Bind("Id,Designacao,Endereco,Coordenadas,EpocaConstrucao,Descricao,LocalidadeId")] Monumento monumento)
         {
+            // obter utilizador autenticado
+            var username = User.Identity?.Name;
+            var utilizador = await _context.Utilizador.FirstOrDefaultAsync(u => u.Username == username);
+            if (utilizador == null) return Unauthorized();
+
             if (ModelState.IsValid)
             {
-                _context.Add(monumento); // adiciona o monumento
-                await _context.SaveChangesAsync(); // guarda na BD
-                return RedirectToAction(nameof(Index)); // redireciona para a lista
+                // garantir que o UtilizadorId é o do utilizador autenticado
+                monumento.UtilizadorId = utilizador.Id;
+
+                _context.Add(monumento);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
 
-            // Se o modelo for inválido, recarrega as listas para o formulário e mostra de novo
+            // se houver erro, recarregar dropdown de localidade e voltar à view
             ViewData["LocalidadeId"] = new SelectList(_context.Localidade, "Id", "NomeLocalidade", monumento.LocalidadeId);
-            ViewData["UtilizadorId"] = new SelectList(_context.Utilizador, "Id", "Nome", monumento.UtilizadorId);
+            ViewBag.CurrentUserName = utilizador.Nome;
+            ViewBag.CurrentUserId = utilizador.Id;
             return View(monumento);
         }
 
         // GET: Monumento/Edit/5
-        // Formulário para editar monumento (só autenticados)
+        // Só o criador do monumento ou Admin podem aceder
         [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -99,27 +115,59 @@ namespace WebApplication1.Controllers
             var monumento = await _context.Monumento.FindAsync(id);
             if (monumento == null) return NotFound();
 
-            // Prepara dropdowns com os valores atuais selecionados
+            // verifica permissões: dono ou admin
+            var username = User.Identity?.Name;
+            var utilizador = await _context.Utilizador.FirstOrDefaultAsync(u => u.Username == username);
+            var isAdmin = User.IsInRole("Admin");
+
+            if (!isAdmin && monumento.UtilizadorId != utilizador?.Id)
+                return Forbid();
+
             ViewData["LocalidadeId"] = new SelectList(_context.Localidade, "Id", "NomeLocalidade", monumento.LocalidadeId);
-            ViewData["UtilizadorId"] = new SelectList(_context.Utilizador, "Id", "Nome", monumento.UtilizadorId);
+
+            // Mostrar nome do dono para informação
+            var dono = await _context.Utilizador.FindAsync(monumento.UtilizadorId);
+            ViewBag.DonoNome = dono?.Nome ?? dono?.Username ?? "Desconhecido";
+
             return View(monumento);
         }
 
         // POST: Monumento/Edit/5
-        // Atualiza os dados do monumento no formulário editado
+        // Actualiza apenas os campos editáveis e preserva o UtilizadorId original
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Designacao,Endereco,Coordenadas,EpocaConstrucao,Descricao,UtilizadorId,LocalidadeId")] Monumento monumento)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Designacao,Endereco,Coordenadas,EpocaConstrucao,Descricao,LocalidadeId")] Monumento monumento)
         {
             if (id != monumento.Id) return NotFound();
 
-            if (!ModelState.IsValid) return View(monumento);
+            // obter o monumento actual da BD (para preservar UtilizadorId e verificar permissões)
+            var existing = await _context.Monumento.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
+            if (existing == null) return NotFound();
+
+            var username = User.Identity?.Name;
+            var utilizador = await _context.Utilizador.FirstOrDefaultAsync(u => u.Username == username);
+            var isAdmin = User.IsInRole("Admin");
+
+            if (!isAdmin && existing.UtilizadorId != utilizador?.Id)
+                return Forbid();
+
+            if (!ModelState.IsValid)
+            {
+                ViewData["LocalidadeId"] = new SelectList(_context.Localidade, "Id", "NomeLocalidade", monumento.LocalidadeId);
+                var dono = await _context.Utilizador.FindAsync(existing.UtilizadorId);
+                ViewBag.DonoNome = dono?.Nome ?? dono?.Username ?? "Desconhecido";
+                return View(monumento);
+            }
 
             try
             {
-                _context.Update(monumento); // atualiza
-                await _context.SaveChangesAsync(); // guarda alterações
+                // preservar o UtilizadorId do existente
+                monumento.UtilizadorId = existing.UtilizadorId;
+
+                // actualizar campos via Attach/Entry
+                _context.Entry(monumento).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -131,8 +179,8 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Monumento/Delete/5
-        // Mostra página para confirmar eliminação (apenas Admin)
-        [Authorize(Roles = "Admin")]
+        // Página de confirmação. Só dono ou Admin podem aceder.
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -144,25 +192,38 @@ namespace WebApplication1.Controllers
 
             if (monumento == null) return NotFound();
 
+            var username = User.Identity?.Name;
+            var utilizador = await _context.Utilizador.FirstOrDefaultAsync(u => u.Username == username);
+            var isAdmin = User.IsInRole("Admin");
+
+            if (!isAdmin && monumento.UtilizadorId != utilizador?.Id)
+                return Forbid();
+
             return View(monumento);
         }
 
         // POST: Monumento/Delete/5
-        // Confirma e executa a eliminação do monumento (apenas Admin)
+        // Confirma deleção (aplica mesma verificação de permissões)
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var monumento = await _context.Monumento.FindAsync(id);
-            if (monumento != null)
-                _context.Monumento.Remove(monumento);
+            if (monumento == null) return NotFound();
 
+            var username = User.Identity?.Name;
+            var utilizador = await _context.Utilizador.FirstOrDefaultAsync(u => u.Username == username);
+            var isAdmin = User.IsInRole("Admin");
+
+            if (!isAdmin && monumento.UtilizadorId != utilizador?.Id)
+                return Forbid();
+
+            _context.Monumento.Remove(monumento);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        // Verifica se um monumento existe na BD
         private bool MonumentoExists(int id)
         {
             return _context.Monumento.Any(e => e.Id == id);
@@ -174,7 +235,7 @@ namespace WebApplication1.Controllers
         [Authorize]
         public async Task<IActionResult> UploadImagem(int monumentoId, IFormFile imagem)
         {
-            var username = User.Identity.Name; // nome do utilizador autenticado
+            var username = User.Identity.Name;
             var utilizador = await _context.Utilizador.FirstOrDefaultAsync(u => u.Username == username);
             if (utilizador == null) return Unauthorized();
 
@@ -187,26 +248,20 @@ namespace WebApplication1.Controllers
             var monumento = await _context.Monumento.Include(m => m.Imagens).FirstOrDefaultAsync(m => m.Id == monumentoId);
             if (monumento == null) return NotFound();
 
-            // Gera nome único para imagem para evitar conflitos
             var nomeImagem = Guid.NewGuid().ToString() + Path.GetExtension(imagem.FileName);
             var caminhoPasta = Path.Combine(_webHostEnvironment.WebRootPath, "imagens");
 
-            // Cria pasta caso não exista
             if (!Directory.Exists(caminhoPasta))
                 Directory.CreateDirectory(caminhoPasta);
 
             var caminhoCompleto = Path.Combine(caminhoPasta, nomeImagem);
-
-            // Grava o ficheiro no disco
             using (var stream = new FileStream(caminhoCompleto, FileMode.Create))
             {
                 await imagem.CopyToAsync(stream);
             }
 
-            // Define a imagem principal apenas se o utilizador for o criador do monumento e ainda não houver imagem principal
             bool isPrincipal = monumento.UtilizadorId == utilizador.Id && !monumento.Imagens.Any(i => i.IsPrincipal);
 
-            // Cria novo objeto imagem
             var novaImagem = new Imagem
             {
                 NomeImagem = nomeImagem,
@@ -215,14 +270,14 @@ namespace WebApplication1.Controllers
                 IsPrincipal = isPrincipal
             };
 
-            _context.Imagem.Add(novaImagem); // adiciona à BD
+            _context.Imagem.Add(novaImagem);
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Details", new { id = monumentoId });
         }
 
         // POST: Monumento/DeleteImagem
-        // Permite apagar uma imagem (só o criador da imagem ou admin podem apagar)
+        // Só o dono da imagem ou Admin podem apagar
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> DeleteImagem(int id)
@@ -234,23 +289,21 @@ namespace WebApplication1.Controllers
             var utilizador = await _context.Utilizador.FirstOrDefaultAsync(u => u.Username == username);
             var isAdmin = User.IsInRole("Admin");
 
-            // Verifica permissão para apagar (admin ou dono da imagem)
             if (!isAdmin && imagem.UtilizadorId != utilizador?.Id)
                 return Forbid();
 
-            // Apaga ficheiro físico da imagem
             var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "imagens", imagem.NomeImagem);
             if (System.IO.File.Exists(filePath))
                 System.IO.File.Delete(filePath);
 
-            _context.Imagem.Remove(imagem); // remove da BD
+            _context.Imagem.Remove(imagem);
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Details", new { id = imagem.MonumentoId });
         }
 
         // POST: Monumento/ToggleVisita
-        // Marca ou desmarca um monumento como visitado pelo utilizador autenticado
+        // Marca / desmarca visita do utilizador autenticado
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> ToggleVisita(int id)
@@ -259,13 +312,12 @@ namespace WebApplication1.Controllers
             var utilizador = await _context.Utilizador.FirstOrDefaultAsync(u => u.Username == username);
             if (utilizador == null) return Unauthorized();
 
-            // Procura se já existe uma visita registada para o utilizador e monumento
             var visita = await _context.VisitaMonumento.FirstOrDefaultAsync(v => v.MonumentoId == id && v.UtilizadorId == utilizador.Id);
 
             if (visita != null)
-                _context.VisitaMonumento.Remove(visita); // remove visita se existir (toggle off)
+                _context.VisitaMonumento.Remove(visita);
             else
-                _context.VisitaMonumento.Add(new VisitaMonumento { MonumentoId = id, UtilizadorId = utilizador.Id }); // adiciona visita (toggle on)
+                _context.VisitaMonumento.Add(new VisitaMonumento { MonumentoId = id, UtilizadorId = utilizador.Id });
 
             await _context.SaveChangesAsync();
             return RedirectToAction("Details", new { id });

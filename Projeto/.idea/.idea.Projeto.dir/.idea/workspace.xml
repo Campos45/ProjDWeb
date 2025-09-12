@@ -9,15 +9,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14e42af0-b416-4e94-a6b6-58f49122598b" name="Changes" comment="Atualizaçao APIs-&gt; falta post Utilizador">
+    <list default="true" id="14e42af0-b416-4e94-a6b6-58f49122598b" name="Changes" comment="APIs todas a funcionar">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controllers/Api/UtilizadorApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/UtilizadorApiController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/LocalidadeController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/LocalidadeController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controllers/MonumentoController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/MonumentoController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/DTO/UtilizadorDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/DTO/UtilizadorDTO.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/Home/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Home/Index.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Localidade.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Localidade.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Monumento/Create.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Monumento/Create.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Monumento/Edit.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Monumento/Edit.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Monumento/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Monumento/Index.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/app.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.db-shm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.db-wal" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +53,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock://C:/Users/Martim/RiderProjects/ProjDWeb/Projeto/Controllers/MonumentoController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Views/Utilizador/Create.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Views/Utilizador/Login1.cshtml" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Views/Utilizador/Register.cshtml" root0="SKIP_HIGHLIGHTING" />
@@ -177,7 +179,7 @@
       <workItem from="1756992136848" duration="8648000" />
       <workItem from="1757083599905" duration="2347000" />
       <workItem from="1757514550902" duration="10925000" />
-      <workItem from="1757675730940" duration="5991000" />
+      <workItem from="1757675730940" duration="10140000" />
     </task>
     <task id="LOCAL-00001" summary="criar monumentos updated v2">
       <option name="closed" value="true" />
@@ -339,7 +341,15 @@
       <option name="project" value="LOCAL" />
       <updated>1757454849758</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="APIs todas a funcionar">
+      <option name="closed" value="true" />
+      <created>1757691801893</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1757691801893</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -409,6 +419,7 @@
     <MESSAGE value="Autenticação API" />
     <MESSAGE value="Atualizaçao das APIs -&gt; Posts e Puts&#10;Pt1" />
     <MESSAGE value="Atualizaçao APIs-&gt; falta post Utilizador" />
-    <option name="LAST_COMMIT_MESSAGE" value="Atualizaçao APIs-&gt; falta post Utilizador" />
+    <MESSAGE value="APIs todas a funcionar" />
+    <option name="LAST_COMMIT_MESSAGE" value="APIs todas a funcionar" />
   </component>
 </project>
