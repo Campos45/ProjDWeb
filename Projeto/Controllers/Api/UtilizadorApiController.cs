@@ -5,6 +5,7 @@ using appMonumentos.Models;
 using appMonumentos.Models.Dtos;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace WebApplication1.Controllers.Api
 {
@@ -17,11 +18,13 @@ namespace WebApplication1.Controllers.Api
     {
         //base de dados para acesso aos dados
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
         // Construtor que recebe a base de dados
-        public UtilizadorApiController(ApplicationDbContext context)
+        public UtilizadorApiController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: api/UtilizadorApi
@@ -72,11 +75,27 @@ namespace WebApplication1.Controllers.Api
         // POST: api/UtilizadorApi
         // Método para criar um novo utilizador
         [HttpPost]
-        public async Task<ActionResult<UtilizadorCreateDto>> PostUtilizador([FromBody] UtilizadorCreateDto dto)
+        public async Task<IActionResult> PostUtilizador(UtilizadorCreateDto dto)
         {
+            // 1. Criar IdentityUser
+            var identityUser = new IdentityUser
+            {
+                UserName = dto.Username,
+                Email = dto.Email,
+                EmailConfirmed = true
+            };
+
+            var result = await _userManager.CreateAsync(identityUser, dto.Password);
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            // 2. Criar Utilizador extra (tua tabela)
             var utilizador = new Utilizador
             {
                 Username = dto.Username,
+                Password = dto.Password, // ⚠️ neste caso, está duplicado, podes optar por remover
                 Nome = dto.Nome,
                 LocalidadeUtilizador = dto.LocalidadeUtilizador,
                 Email = dto.Email
@@ -85,8 +104,15 @@ namespace WebApplication1.Controllers.Api
             _context.Utilizador.Add(utilizador);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetUtilizador), new { id = utilizador.Id }, dto);
+            return Ok(new
+            {
+                Message = "Utilizador criado com sucesso",
+                UserId = identityUser.Id,
+                ExtraId = utilizador.Id
+            });
         }
+
+
 
 
         // PUT: api/UtilizadorApi/5

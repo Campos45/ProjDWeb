@@ -9,15 +9,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14e42af0-b416-4e94-a6b6-58f49122598b" name="Changes" comment="Atualizaçao das APIs -&gt; Posts e Puts&#10;Pt1">
-      <change afterPath="$PROJECT_DIR$/Models/DTO/ImagemDTO.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Models/DTO/UtilizadorDTO.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Models/DTO/VisitaDTO.cs" afterDir="false" />
+    <list default="true" id="14e42af0-b416-4e94-a6b6-58f49122598b" name="Changes" comment="Atualizaçao APIs-&gt; falta post Utilizador">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controllers/Api/ImagemApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/ImagemApiController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controllers/Api/UtilizadorApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/UtilizadorApiController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controllers/Api/VisitaApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/VisitaApiController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Utilizador.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Utilizador.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/MonumentoController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/MonumentoController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/DTO/UtilizadorDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/DTO/UtilizadorDTO.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Home/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Home/Index.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/app.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.db-shm" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app.db-wal" beforeDir="false" />
@@ -179,6 +176,8 @@
       <workItem from="1756908451042" duration="5438000" />
       <workItem from="1756992136848" duration="8648000" />
       <workItem from="1757083599905" duration="2347000" />
+      <workItem from="1757514550902" duration="10925000" />
+      <workItem from="1757675730940" duration="5991000" />
     </task>
     <task id="LOCAL-00001" summary="criar monumentos updated v2">
       <option name="closed" value="true" />
@@ -332,7 +331,15 @@
       <option name="project" value="LOCAL" />
       <updated>1757443728135</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Atualizaçao APIs-&gt; falta post Utilizador">
+      <option name="closed" value="true" />
+      <created>1757454849758</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1757454849758</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -401,6 +408,7 @@
     <MESSAGE value="APIs updated" />
     <MESSAGE value="Autenticação API" />
     <MESSAGE value="Atualizaçao das APIs -&gt; Posts e Puts&#10;Pt1" />
-    <option name="LAST_COMMIT_MESSAGE" value="Atualizaçao das APIs -&gt; Posts e Puts&#10;Pt1" />
+    <MESSAGE value="Atualizaçao APIs-&gt; falta post Utilizador" />
+    <option name="LAST_COMMIT_MESSAGE" value="Atualizaçao APIs-&gt; falta post Utilizador" />
   </component>
 </project>
