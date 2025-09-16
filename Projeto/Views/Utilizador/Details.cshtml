@@ -1,67 +1,55 @@
 ﻿@model appMonumentos.Models.Utilizador
 
 @{
-    // Define o título da página
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalhes do Utilizador";
 }
 
-<h1>Details</h1>
+<h1>Detalhes do Utilizador</h1>
 
-<div>
-    <h4>Utilizador</h4>
-    <hr />
-    <!-- Lista de detalhes do utilizador -->
-    <dl class="row">
-        <dt class = "col-sm-2">
-            <!-- Nome do campo Username -->
-            @Html.DisplayNameFor(model => model.Username)
-        </dt>
-        <dd class = "col-sm-10">
-            <!-- Valor do Username -->
-            @Html.DisplayFor(model => model.Username)
-        </dd>
+<dl class="row">
+    <dt class="col-sm-2">Username</dt>
+    <dd class="col-sm-10">@Model.Username</dd>
 
-        <dt class = "col-sm-2">
-            <!-- Nome do campo Password -->
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-        <dd class = "col-sm-10">
-            <!-- Valor da Password -->
-            @Html.DisplayFor(model => model.Password)
-        </dd>
+    <dt class="col-sm-2">Nome</dt>
+    <dd class="col-sm-10">@Model.Nome</dd>
 
-        <dt class = "col-sm-2">
-            <!-- Nome do campo Nome -->
-            @Html.DisplayNameFor(model => model.Nome)
-        </dt>
-        <dd class = "col-sm-10">
-            <!-- Valor do Nome -->
-            @Html.DisplayFor(model => model.Nome)
-        </dd>
+    <dt class="col-sm-2">Localidade</dt>
+    <dd class="col-sm-10">@Model.LocalidadeUtilizador</dd>
 
-        <dt class = "col-sm-2">
-            <!-- Nome do campo Localidade do utilizador -->
-            @Html.DisplayNameFor(model => model.LocalidadeUtilizador)
-        </dt>
-        <dd class = "col-sm-10">
-            <!-- Valor da Localidade -->
-            @Html.DisplayFor(model => model.LocalidadeUtilizador)
-        </dd>
+    <dt class="col-sm-2">Email</dt>
+    <dd class="col-sm-10">@Model.Email</dd>
+</dl>
 
-        <dt class = "col-sm-2">
-            <!-- Nome do campo Email -->
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            <!-- Valor do Email -->
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-    </dl>
-</div>
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar</a> |
+    <a asp-action="Index" class="btn btn-secondary">Voltar à Lista</a>
+</p>
 
-<div>
-    <!-- Link para editar o utilizador atual -->
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <!-- Link para voltar à lista de utilizadores -->
-    <a asp-action="Index">Back to List</a>
-</div>
+<hr />
+
+<h3>Monumentos Visitados</h3>
+
+@if (Model.VisitasAosMonumentos != null && Model.VisitasAosMonumentos.Any())
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Monumento</th>
+            <th>Número de Visitas</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var visita in Model.VisitasAosMonumentos)
+        {
+            <tr>
+                <td>@visita.Monumento?.Designacao</td>
+                <td>@visita.NumeroVisitas</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p><i>Este utilizador ainda não marcou visitas a monumentos.</i></p>
+}

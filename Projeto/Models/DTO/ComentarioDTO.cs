@@ -1,9 +1,18 @@
 ﻿namespace appMonumentos.Models.Dtos
 {
     
+    /// <summary>
+    /// DTO PARA A API COMENTARIOS
+    /// </summary>
     public class ComentarioDto
     {
+        /// <summary>
+        /// identificador do comentario
+        /// </summary>
         public int Id { get; set; }
+        /// <summary>
+        /// texto associado ao comentario
+        /// </summary>
         public string ComentarioTexto { get; set; }
         public DateTime Data { get; set; }
         public int ImagemId { get; set; }

@@ -95,7 +95,7 @@ namespace WebApplication1.Controllers.Api
             var utilizador = new Utilizador
             {
                 Username = dto.Username,
-                Password = dto.Password, // ⚠️ neste caso, está duplicado, podes optar por remover
+                Password = dto.Password, // 
                 Nome = dto.Nome,
                 LocalidadeUtilizador = dto.LocalidadeUtilizador,
                 Email = dto.Email

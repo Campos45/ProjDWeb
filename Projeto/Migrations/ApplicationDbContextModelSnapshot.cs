@@ -408,6 +408,9 @@ namespace WebApplication1.Migrations
                     b.Property<int>("MonumentoId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("NumeroVisitas")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("UtilizadorId")
                         .HasColumnType("INTEGER");
 

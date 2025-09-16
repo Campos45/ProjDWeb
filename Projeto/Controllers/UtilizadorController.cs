@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Data;
 using appMonumentos.Models;
 using appMonumentos.Models.Account;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication1.Controllers
 {
@@ -21,22 +22,28 @@ namespace WebApplication1.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
         }
-        
+
         public IActionResult Index()
         {
-            var utilizadores = _context.Utilizador.ToList();
+            var utilizadores = _context.Utilizador
+                .Include(u => u.VisitasAosMonumentos)
+                .ThenInclude(v => v.Monumento)
+                .ToList();
+
             return View(utilizadores);
         }
-        
-        // GET: Utilizador/Details/5
+
         public IActionResult Details(int id)
         {
-            var utilizador = _context.Utilizador.FirstOrDefault(u => u.Id == id);
+            var utilizador = _context.Utilizador
+                .Include(u => u.VisitasAosMonumentos)
+                .ThenInclude(v => v.Monumento)
+                .FirstOrDefault(u => u.Id == id);
+
             if (utilizador == null) return NotFound();
             return View(utilizador);
         }
-        
-        // GET: Utilizador/Edit/5
+
         public IActionResult Edit(int id)
         {
             var utilizador = _context.Utilizador.FirstOrDefault(u => u.Id == id);
@@ -44,7 +51,6 @@ namespace WebApplication1.Controllers
             return View(utilizador);
         }
 
-        // POST: Utilizador/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Utilizador utilizador)
@@ -60,7 +66,6 @@ namespace WebApplication1.Controllers
             return View(utilizador);
         }
 
-        // GET: Utilizador/Delete/5
         public IActionResult Delete(int id)
         {
             var utilizador = _context.Utilizador.FirstOrDefault(u => u.Id == id);
@@ -68,7 +73,6 @@ namespace WebApplication1.Controllers
             return View(utilizador);
         }
 
-        // POST: Utilizador/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
@@ -81,14 +85,8 @@ namespace WebApplication1.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
-        // ============================
         // REGISTO
-        // ============================
-        public IActionResult Register()
-        {
-            return View();
-        }
+        public IActionResult Register() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -107,14 +105,12 @@ namespace WebApplication1.Controllers
 
             if (result.Succeeded)
             {
-                // Role padrão
                 await _userManager.AddToRoleAsync(identityUser, "Normal");
 
-                // Guardar também na tabela Utilizador
                 var utilizador = new Utilizador
                 {
                     Username = model.Username,
-                    Password = model.Password, // 
+                    Password = model.Password,
                     Nome = model.Nome,
                     LocalidadeUtilizador = model.LocalidadeUtilizador,
                     Email = model.Email
@@ -123,9 +119,7 @@ namespace WebApplication1.Controllers
                 _context.Utilizador.Add(utilizador);
                 await _context.SaveChangesAsync();
 
-                // Login automático após registo
                 await _signInManager.SignInAsync(identityUser, isPersistent: false);
-
                 return RedirectToAction("Index", "Home");
             }
 
@@ -135,13 +129,8 @@ namespace WebApplication1.Controllers
             return View(model);
         }
 
-        // ============================
         // LOGIN
-        // ============================
-        public IActionResult Login()
-        {
-            return View();
-        }
+        public IActionResult Login() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -152,16 +141,12 @@ namespace WebApplication1.Controllers
             var result = await _signInManager.PasswordSignInAsync(
                 model.Username, model.Password, model.RememberMe, lockoutOnFailure: false);
 
-            if (result.Succeeded)
-                return RedirectToAction("Index", "Home");
+            if (result.Succeeded) return RedirectToAction("Index", "Home");
 
             ModelState.AddModelError(string.Empty, "Login inválido.");
             return View(model);
         }
 
-        // ============================
-        // LOGOUT
-        // ============================
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()

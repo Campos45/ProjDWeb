@@ -1,12 +1,11 @@
 ﻿@model appMonumentos.Models.Monumento
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Criar Monumento";
 }
 
-<h1>Create</h1>
+<h1>Criar Monumento</h1>
 
-<h4>Monumento</h4>
 <hr />
 <div class="row">
     <div class="col-md-6">
@@ -39,17 +38,14 @@
 
             <div class="form-group">
                 <label asp-for="Descricao" class="control-label"></label>
-                <input asp-for="Descricao" class="form-control" />
+                <textarea asp-for="Descricao" class="form-control"></textarea>
                 <span asp-validation-for="Descricao" class="text-danger"></span>
             </div>
 
-            <!-- Mostrar o utilizador autenticado (não editável) -->
+            <!-- Mostrar o utilizador autenticado -->
             <div class="form-group">
-                <label class="control-label">Criador (utilizador autenticado)</label>
-                <input class="form-control" value="@ViewBag.CurrentUserName" disabled />
-                <!-- Opcional: não é necessário enviar UtilizadorId, o servidor associa pelo User.Identity.
-                     Se quiseres enviar o id oculto, podes descomentar a linha seguinte: -->
-                @* <input type="hidden" name="UtilizadorId" value="@ViewBag.CurrentUserId" /> *@
+                <label class="control-label">Criador</label>
+                <input class="form-control" value="@User.Identity.Name" disabled />
             </div>
 
             <div class="form-group">
@@ -61,7 +57,7 @@
             </div>
 
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Criar" class="btn btn-primary" />
                 <a asp-action="Index" class="btn btn-secondary ml-2">Cancelar</a>
             </div>
         </form>

@@ -1,19 +1,26 @@
+// Models/VisitaMonumento.cs
 using System.ComponentModel.DataAnnotations;
 
 namespace appMonumentos.Models
 {
-    // Modelo que representa a visita de um utilizador a um monumento
+    /// <summary>
+    /// Representa a relação entre Utilizador e Monumento (visita).
+    /// Agora contem também o número de vezes que o utilizador visitou o monumento.
+    /// </summary>
     public class VisitaMonumento
     {
         [Key]
-        public int Id { get; set; }  // Identificador único da visita
+        public int Id { get; set; }
 
-        // Chave estrangeira para o monumento visitado
+        // FK para o monumento
         public int MonumentoId { get; set; }
-        public Monumento Monumento { get; set; }  // Propriedade de navegação para o monumento
+        public Monumento Monumento { get; set; } = null!;
 
-        // Chave estrangeira para o utilizador que fez a visita
+        // FK para o utilizador (tabela Utilizador do projecto)
         public int UtilizadorId { get; set; }
-        public Utilizador Utilizador { get; set; }  // Propriedade de navegação para o utilizador
+        public Utilizador Utilizador { get; set; } = null!;
+
+        // Número de visitas deste utilizador a este monumento (não nulo, default 1)
+        public int NumeroVisitas { get; set; } = 1;
     }
 }
