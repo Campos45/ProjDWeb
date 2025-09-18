@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Data;
 using appMonumentos.Models;
 using appMonumentos.Models.Account;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication1.Controllers
@@ -23,6 +24,7 @@ namespace WebApplication1.Controllers
             _signInManager = signInManager;
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             var utilizadores = _context.Utilizador
@@ -39,8 +41,9 @@ namespace WebApplication1.Controllers
                 .Include(u => u.VisitasAosMonumentos)
                 .ThenInclude(v => v.Monumento)
                 .FirstOrDefault(u => u.Id == id);
-
+            
             if (utilizador == null) return NotFound();
+            
             return View(utilizador);
         }
 

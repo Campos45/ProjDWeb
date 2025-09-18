@@ -61,12 +61,22 @@ namespace WebApplication1.Controllers.Api
         [HttpPost]
         public async Task<ActionResult<object>> PostVisita([FromBody] VisitaCreateDto dto)
         {
+            
             var visita = new VisitaMonumento
             {
                 MonumentoId = dto.MonumentoId,
                 UtilizadorId = dto.UtilizadorId,
                 NumeroVisitas = 1
             };
+            
+            // Verificar se já existe visita do mesmo utilizador para este monumento
+            var existing = await _context.VisitaMonumento
+                .FirstOrDefaultAsync(v => v.MonumentoId == visita.MonumentoId && v.UtilizadorId == visita.UtilizadorId);
+
+            if (existing != null)
+            {
+                return Conflict(new { message = "Este utilizador já registou visita neste monumento." });
+            }
 
             _context.VisitaMonumento.Add(visita);
             await _context.SaveChangesAsync();

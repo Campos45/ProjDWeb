@@ -135,7 +135,7 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 // =======================
-// Criação do admin, user normal e roles
+// Criação do admin e da role
 // =======================
 using (var scope = app.Services.CreateScope())
 {
@@ -143,16 +143,15 @@ using (var scope = app.Services.CreateScope())
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-    // Garantir roles
+    // Garantir role Admin
     if (!await roleManager.RoleExistsAsync("Admin"))
         await roleManager.CreateAsync(new IdentityRole("Admin"));
 
+    // Garantir role Utilizador (mesmo que não cries um user já fica pronta)
     if (!await roleManager.RoleExistsAsync("Utilizador"))
         await roleManager.CreateAsync(new IdentityRole("Utilizador"));
 
-    // =======================
     // Criar utilizador Admin
-    // =======================
     var adminEmail = "admin@admin.com";
     var adminUser = await userManager.FindByEmailAsync(adminEmail);
     if (adminUser == null)
@@ -178,43 +177,7 @@ using (var scope = app.Services.CreateScope())
                     Nome = "Administrador",
                     Email = adminEmail,
                     LocalidadeUtilizador = "N/D",
-                    Password = "IdentityManaged" // <- dummy
-                };
-                context.Utilizador.Add(utilizador);
-                await context.SaveChangesAsync();
-            }
-        }
-    }
-
-    // =======================
-    // Criar utilizador normal
-    // =======================
-    var userEmail = "user@gmail.com";
-    var normalUser = await userManager.FindByEmailAsync(userEmail);
-    if (normalUser == null)
-    {
-        normalUser = new IdentityUser
-        {
-            UserName = "UserNormal",
-            Email = userEmail,
-            EmailConfirmed = true
-        };
-
-        var result = await userManager.CreateAsync(normalUser, "aA-123");
-        if (result.Succeeded)
-        {
-            await userManager.AddToRoleAsync(normalUser, "Utilizador");
-
-            // Inserir também na tabela personalizada Utilizador
-            if (!context.Utilizador.Any(u => u.Username == normalUser.UserName))
-            {
-                var utilizador = new Utilizador
-                {
-                    Username = normalUser.UserName,
-                    Nome = "Utilizador",
-                    Email = userEmail,
-                    LocalidadeUtilizador = "N/D",
-                    Password = "IdentityManaged" // <- dummy
+                    Password = "IdentityManaged" // dummy
                 };
                 context.Utilizador.Add(utilizador);
                 await context.SaveChangesAsync();
@@ -222,6 +185,7 @@ using (var scope = app.Services.CreateScope())
         }
     }
 }
+
 
 
 // =======================
