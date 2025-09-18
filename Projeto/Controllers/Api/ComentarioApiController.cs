@@ -8,24 +8,21 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication1.Controllers.Api
 {
-    // Define a rota base da API para este controlador: "api/ComentarioApi"
+    /// API REST responsável por gerir comentários nas imagens
     [Route("api/[controller]")]
-    [ApiController]   // Indica que este controlador é usado para API REST
+    [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-
     public class ComentarioApiController : ControllerBase  
     {
-        // base de dados para aceder aos dados
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context; // Contexto da base de dados
 
-        // Construtor que recebe a base de dados
         public ComentarioApiController(ApplicationDbContext context)
         {
             _context = context;
         }
 
         // GET: api/ComentarioApi
-        // Método que retorna uma lista de todos os comentários
+        /// Devolve a lista de todos os comentários com informação adicional do autor
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ComentarioDto>>> GetComentarios()
         {
@@ -44,7 +41,7 @@ namespace WebApplication1.Controllers.Api
         }
 
         // GET: api/ComentarioApi/{id}
-        // Método que obtém um comentário específico pelo seu ID
+        /// Devolve os detalhes de um comentário específico
         [HttpGet("{id}")]
         public async Task<ActionResult<ComentarioDto>> GetComentario(int id)
         {
@@ -68,7 +65,7 @@ namespace WebApplication1.Controllers.Api
         }
 
         // POST: api/ComentarioApi
-        // Método para adicionar um novo comentário
+        /// Cria um novo comentário
         [HttpPost]
         public async Task<ActionResult<ComentarioCreateDto>> PostComentario([FromBody] ComentarioCreateDto dto)
         {
@@ -83,8 +80,6 @@ namespace WebApplication1.Controllers.Api
             _context.Comentario.Add(comentario);
             await _context.SaveChangesAsync();
 
-            // resposta minimal, apenas com o que interessa
-            
             var responseDto = new ComentarioCreateDto
             {
                 ComentarioTexto = comentario.ComentarioTexto,
@@ -96,9 +91,8 @@ namespace WebApplication1.Controllers.Api
             return CreatedAtAction(nameof(GetComentario), new { id = comentario.Id }, responseDto);
         }
 
-
-        // PUT: api/ComentarioApi
-        // Método para editar um comentário
+        // PUT: api/ComentarioApi/{id}
+        /// Atualiza um comentário existente
         [HttpPut("{id}")]
         public async Task<IActionResult> PutComentario(int id, [FromBody] ComentarioUpdateDto dto)
         {
@@ -109,7 +103,6 @@ namespace WebApplication1.Controllers.Api
             if (comentario == null)
                 return NotFound();
 
-            // Atualizar apenas os campos permitidos
             comentario.ComentarioTexto = dto.ComentarioTexto;
             comentario.Data = dto.Data;
 
@@ -119,26 +112,17 @@ namespace WebApplication1.Controllers.Api
             return NoContent();
         }
 
-        
         // DELETE: api/ComentarioApi/{id}
-        // Método para apagar um comentário pelo seu ID
-        
+        /// Apaga um comentário pelo ID
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteComentario(int id)
         {
-            // Procura o comentário na base de dados pelo ID
             var comentario = await _context.Comentario.FindAsync(id);
-
-            // Se não existir, retorna 404 Not Found
             if (comentario == null) return NotFound();
 
-            // Remove o comentário da base de dados
             _context.Comentario.Remove(comentario);
-
-            // Aplica as alterações na base de dados
             await _context.SaveChangesAsync();
 
-            // Retorna resposta HTTP 204 No Content indicando que a operação foi bem-sucedida mas sem conteúdo a devolver
             return NoContent();
         }
     }

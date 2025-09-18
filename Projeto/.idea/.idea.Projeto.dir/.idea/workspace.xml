@@ -9,12 +9,36 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14e42af0-b416-4e94-a6b6-58f49122598b" name="Changes" comment="Error fixing e outras alteraçoes">
+    <list default="true" id="14e42af0-b416-4e94-a6b6-58f49122598b" name="Changes" comment="Commit final pre documentaçao">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/Api/AuthApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/AuthApiController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/Api/ComentarioApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/ComentarioApiController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controllers/Api/ImagemApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/ImagemApiController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/Api/LocalidadeApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/LocalidadeApiController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/Api/MonumentoApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/MonumentoApiController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/Api/UtilizadorApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/UtilizadorApiController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controllers/Api/VisitaApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/VisitaApiController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/ComentarioController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/ComentarioController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/LocalidadeController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/LocalidadeController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/MonumentoController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/MonumentoController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controllers/UtilizadorController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/UtilizadorController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/VisitaController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/VisitaController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data/ApplicationDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/ApplicationDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Caracteristicas.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Caracteristicas.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Comentario.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Comentario.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/DTO/ComentarioDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/DTO/ComentarioDTO.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/DTO/ImagemDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/DTO/ImagemDTO.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/DTO/LocalidadeDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/DTO/LocalidadeDTO.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/DTO/MonumentoDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/DTO/MonumentoDTO.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/DTO/UtilizadorDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/DTO/UtilizadorDTO.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/DTO/VisitaDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/DTO/VisitaDTO.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Imagem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Imagem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Localidade.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Localidade.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Monumento.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Monumento.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Utilizador.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Utilizador.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/VisitaMonumento.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/VisitaMonumento.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Utilizador/Create.cshtml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Utilizador/Login1.cshtml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/app.db" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -176,7 +200,7 @@
       <workItem from="1756992136848" duration="8648000" />
       <workItem from="1757083599905" duration="2347000" />
       <workItem from="1757514550902" duration="10925000" />
-      <workItem from="1757675730940" duration="63665000" />
+      <workItem from="1757675730940" duration="69171000" />
     </task>
     <task id="LOCAL-00001" summary="criar monumentos updated v2">
       <option name="closed" value="true" />
@@ -386,7 +410,15 @@
       <option name="project" value="LOCAL" />
       <updated>1758156338164</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="Commit final pre documentaçao">
+      <option name="closed" value="true" />
+      <created>1758208296628</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1758208296628</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -437,7 +469,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="criar monumentos updated v2" />
     <MESSAGE value="merge monumento to main" />
     <MESSAGE value="adicionar botoes para alternar entre controllers" />
     <MESSAGE value="editar acesso ao edit/delete/create/details nos monumentos consoante o tipo de user" />
@@ -462,6 +493,7 @@
     <MESSAGE value="Relaçao M-N e outras alteraçoes" />
     <MESSAGE value="Error fixing e updates" />
     <MESSAGE value="Error fixing e outras alteraçoes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Error fixing e outras alteraçoes" />
+    <MESSAGE value="Commit final pre documentaçao" />
+    <option name="LAST_COMMIT_MESSAGE" value="Commit final pre documentaçao" />
   </component>
 </project>

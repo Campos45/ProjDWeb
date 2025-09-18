@@ -9,18 +9,16 @@ using Microsoft.AspNetCore.Identity;
 
 namespace WebApplication1.Controllers.Api
 {
-    // Indica que este controlador é um API controller
+    /// API responsável pela gestão dos utilizadores
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    // Define a rota base do controlador (ex: "api/UtilizadorApi")
     [Route("api/[controller]")]
     public class UtilizadorApiController : ControllerBase  
     {
-        //base de dados para acesso aos dados
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly ApplicationDbContext _context;  // Contexto da base de dados
+        private readonly UserManager<IdentityUser> _userManager; // Gestão de utilizadores do Identity
 
-        // Construtor que recebe a base de dados
+        // Construtor que recebe o contexto e o gestor de utilizadores
         public UtilizadorApiController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
@@ -28,7 +26,7 @@ namespace WebApplication1.Controllers.Api
         }
 
         // GET: api/UtilizadorApi
-        // Método que retorna a lista de todos os utilizadores
+        /// Retorna a lista de todos os utilizadores (apenas dados essenciais)
         [HttpGet]
         public async Task<ActionResult<IEnumerable<object>>> GetUtilizadores()
         {
@@ -46,8 +44,8 @@ namespace WebApplication1.Controllers.Api
             return Ok(utilizadores);
         }
 
-        // GET: api/UtilizadorApi/5
-        // Método que retorna um utilizador específico pelo seu ID
+        // GET: api/UtilizadorApi/{id}
+        /// Retorna os dados de um utilizador específico
         [HttpGet("{id}")]
         public async Task<ActionResult<object>> GetUtilizador(int id)
         {
@@ -63,21 +61,17 @@ namespace WebApplication1.Controllers.Api
                 })
                 .FirstOrDefaultAsync();
 
-            if (utilizador == null)
-            {
-                return NotFound();
-            }
+            if (utilizador == null) return NotFound();
 
             return Ok(utilizador);
         }
 
-
         // POST: api/UtilizadorApi
-        // Método para criar um novo utilizador
+        /// Cria um novo utilizador (tanto no Identity como na tabela personalizada)
         [HttpPost]
         public async Task<IActionResult> PostUtilizador(UtilizadorCreateDto dto)
         {
-            // 1. Criar IdentityUser
+            // 1. Criação do utilizador no Identity
             var identityUser = new IdentityUser
             {
                 UserName = dto.Username,
@@ -86,16 +80,13 @@ namespace WebApplication1.Controllers.Api
             };
 
             var result = await _userManager.CreateAsync(identityUser, dto.Password);
-            if (!result.Succeeded)
-            {
-                return BadRequest(result.Errors);
-            }
+            if (!result.Succeeded) return BadRequest(result.Errors);
 
-            // 2. Criar Utilizador extra (tua tabela)
+            // 2. Inserção na tabela  "Utilizador"
             var utilizador = new Utilizador
             {
                 Username = dto.Username,
-                Password = dto.Password, // 
+                Password = dto.Password, 
                 Nome = dto.Nome,
                 LocalidadeUtilizador = dto.LocalidadeUtilizador,
                 Email = dto.Email
@@ -112,11 +103,8 @@ namespace WebApplication1.Controllers.Api
             });
         }
 
-
-
-
-        // PUT: api/UtilizadorApi/5
-        // Método para atualizar um utilizador existente
+        // PUT: api/UtilizadorApi/{id}
+        /// Atualiza um utilizador existente na tabela personalizada
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUtilizador(int id, [FromBody] UtilizadorUpdateDto dto)
         {
@@ -136,25 +124,17 @@ namespace WebApplication1.Controllers.Api
             return NoContent();
         }
 
-
-        // DELETE: api/UtilizadorApi/5
-        // Método para apagar um utilizador pelo seu ID
+        // DELETE: api/UtilizadorApi/{id}
+        /// Remove um utilizador da base de dados
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUtilizador(int id)
         {
-            // Procura o utilizador pelo ID
             var utilizador = await _context.Utilizador.FindAsync(id);
-
-            // Se não encontrado, retorna 404 Not Found
             if (utilizador == null) return NotFound();
 
-            // Remove o utilizador
             _context.Utilizador.Remove(utilizador);
-
-            // Aplica as alterações na base de dados
             await _context.SaveChangesAsync();
 
-            // Retorna 204 No Content indicando que o utilizador foi apagado com sucesso
             return NoContent();
         }
     }

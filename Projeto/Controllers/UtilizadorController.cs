@@ -8,11 +8,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication1.Controllers
 {
+    /// Controlador responsável pela gestão de utilizadores (CRUD + Autenticação)
     public class UtilizadorController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly ApplicationDbContext _context;               // Acesso à BD
+        private readonly UserManager<IdentityUser> _userManager;      // Gestão de utilizadores (Identity)
+        private readonly SignInManager<IdentityUser> _signInManager;  // Gestão de login/logout
 
         public UtilizadorController(
             ApplicationDbContext context,
@@ -24,6 +25,9 @@ namespace WebApplication1.Controllers
             _signInManager = signInManager;
         }
 
+        // ======================
+        // LISTAR UTILIZADORES (apenas Admins)
+        // ======================
         [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
@@ -35,18 +39,19 @@ namespace WebApplication1.Controllers
             return View(utilizadores);
         }
 
+        /// Mostrar detalhes de um utilizador
         public IActionResult Details(int id)
         {
             var utilizador = _context.Utilizador
                 .Include(u => u.VisitasAosMonumentos)
                 .ThenInclude(v => v.Monumento)
                 .FirstOrDefault(u => u.Id == id);
-            
+
             if (utilizador == null) return NotFound();
-            
             return View(utilizador);
         }
 
+        /// GET: Editar utilizador
         public IActionResult Edit(int id)
         {
             var utilizador = _context.Utilizador.FirstOrDefault(u => u.Id == id);
@@ -54,6 +59,7 @@ namespace WebApplication1.Controllers
             return View(utilizador);
         }
 
+        /// POST: Editar utilizador
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Utilizador utilizador)
@@ -69,6 +75,7 @@ namespace WebApplication1.Controllers
             return View(utilizador);
         }
 
+        /// GET: Apagar utilizador
         public IActionResult Delete(int id)
         {
             var utilizador = _context.Utilizador.FirstOrDefault(u => u.Id == id);
@@ -76,6 +83,7 @@ namespace WebApplication1.Controllers
             return View(utilizador);
         }
 
+        /// POST: Confirmar eliminação
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
@@ -88,7 +96,9 @@ namespace WebApplication1.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // REGISTO
+        // ======================
+        // REGISTO DE UTILIZADOR
+        // ======================
         public IActionResult Register() => View();
 
         [HttpPost]
@@ -97,6 +107,7 @@ namespace WebApplication1.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
+            // Criar IdentityUser
             var identityUser = new IdentityUser
             {
                 UserName = model.Username,
@@ -108,12 +119,14 @@ namespace WebApplication1.Controllers
 
             if (result.Succeeded)
             {
+                // Atribuir role por defeito
                 await _userManager.AddToRoleAsync(identityUser, "Normal");
 
+                // Criar utilizador na tabela personalizada
                 var utilizador = new Utilizador
                 {
                     Username = model.Username,
-                    Password = model.Password,
+                    Password = model.Password, // ⚠️ gravado só para consistência com o modelo, não usado em login
                     Nome = model.Nome,
                     LocalidadeUtilizador = model.LocalidadeUtilizador,
                     Email = model.Email
@@ -122,17 +135,21 @@ namespace WebApplication1.Controllers
                 _context.Utilizador.Add(utilizador);
                 await _context.SaveChangesAsync();
 
+                // Login imediato após registo
                 await _signInManager.SignInAsync(identityUser, isPersistent: false);
                 return RedirectToAction("Index", "Home");
             }
 
+            // Se falhar, mostrar erros
             foreach (var error in result.Errors)
                 ModelState.AddModelError(string.Empty, error.Description);
 
             return View(model);
         }
 
-        // LOGIN
+        // ======================
+        // LOGIN / LOGOUT
+        // ======================
         public IActionResult Login() => View();
 
         [HttpPost]

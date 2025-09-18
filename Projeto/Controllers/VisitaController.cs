@@ -9,52 +9,45 @@ using System.Threading.Tasks;
 
 namespace WebApplication1.Controllers
 {
-    // Controller para gerir as visitas dos utilizadores a monumentos
-    // Apenas utilizadores autenticados podem aceder (Authorize)
-    [Authorize]
+    /// Controlador que gere as visitas de utilizadores a monumentos
+    [Authorize] // apenas utilizadores autenticados podem usar
     public class VisitaController : Controller
     {
-        private readonly ApplicationDbContext _context;  // Contexto da base de dados
-        private readonly UserManager<IdentityUser> _userManager; // Gestão de utilizadores do Identity
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        // Construtor para injetar dependências necessárias
         public VisitaController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
 
-        // POST: Método que alterna a visita de um utilizador a um monumento (toggle)
+        ///POST: Alterna visita (se existe remove, se não existe adiciona)
         [HttpPost]
         public async Task<IActionResult> ToggleVisita(int monumentoId)
         {
-            // Obter o utilizador atualmente autenticado
             var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-                return Unauthorized(); // Não autenticado
+            if (user == null) return Unauthorized();
 
-            // Obter os dados adicionais do utilizador na tabela Utilizador
             var utilizador = await _context.Utilizador.FirstOrDefaultAsync(u => u.Username == user.UserName);
-            if (utilizador == null)
-                return Unauthorized(); // Utilizador não encontrado na BD personalizada
+            if (utilizador == null) return Unauthorized();
 
-            // Verificar se já existe uma visita registada para este utilizador e monumento
             var visita = await _context.VisitaMonumento
                 .FirstOrDefaultAsync(v => v.MonumentoId == monumentoId && v.UtilizadorId == utilizador.Id);
 
             if (visita != null)
             {
-                // Se já existir visita, verifica se pode remover (admin ou próprio utilizador)
+                // Se já existir, verificar permissões
                 var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
                 if (!isAdmin && visita.UtilizadorId != utilizador.Id)
-                    return Forbid(); // Proibido para utilizadores que não são admin e não são donos da visita
+                    return Forbid();
 
-                // Remove a visita (toggle OFF)
+                // Remover (toggle off)
                 _context.VisitaMonumento.Remove(visita);
             }
             else
             {
-                // Caso não exista visita, adiciona uma nova visita (toggle ON)
+                // Criar nova visita (toggle on)
                 _context.VisitaMonumento.Add(new VisitaMonumento
                 {
                     MonumentoId = monumentoId,
@@ -62,26 +55,21 @@ namespace WebApplication1.Controllers
                 });
             }
 
-            // Guarda as alterações na base de dados
             await _context.SaveChangesAsync();
-
-            // Resposta OK para o cliente (por exemplo, chamada AJAX)
             return Ok();
         }
 
-        // GET: Obter a lista de nomes dos visitantes de um monumento
+        /// GET: Lista de visitantes de um monumento
         [HttpGet]
         public async Task<IActionResult> ListaVisitantes(int monumentoId)
         {
-            // Buscar na tabela VisitaMonumento os visitantes deste monumento
-            // Incluir os dados do utilizador para obter o nome
             var visitantes = await _context.VisitaMonumento
-                .Include(v => v.Utilizador)  // inclui dados do utilizador relacionado
-                .Where(v => v.MonumentoId == monumentoId)  // filtra pelo monumento
-                .Select(v => v.Utilizador.Nome)  // seleciona apenas o nome do utilizador
+                .Include(v => v.Utilizador)
+                .Where(v => v.MonumentoId == monumentoId)
+                .Select(v => v.Utilizador.Nome)
                 .ToListAsync();
 
-            // Retorna uma partial view que mostra a lista de visitantes
+            // Retorna uma partial view com nomes
             return PartialView("_ListaVisitantesPartial", visitantes);
         }
     }

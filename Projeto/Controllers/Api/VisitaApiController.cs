@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication1.Controllers.Api
 {
+    /// API responsável pela gestão das visitas dos utilizadores aos monumentos
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
@@ -21,6 +22,7 @@ namespace WebApplication1.Controllers.Api
         }
 
         // GET: api/VisitaApi
+        /// Lista todas as visitas registadas
         [HttpGet]
         public async Task<ActionResult<IEnumerable<object>>> GetVisitas()
         {
@@ -37,7 +39,8 @@ namespace WebApplication1.Controllers.Api
             return Ok(visitas);
         }
 
-        // GET: api/VisitaApi/5
+        // GET: api/VisitaApi/{id}
+        /// Retorna os dados de uma visita específica
         [HttpGet("{id}")]
         public async Task<ActionResult<object>> GetVisita(int id)
         {
@@ -58,18 +61,18 @@ namespace WebApplication1.Controllers.Api
         }
 
         // POST: api/VisitaApi
+        /// Cria uma nova visita (um utilizador só pode registar uma vez por monumento)
         [HttpPost]
         public async Task<ActionResult<object>> PostVisita([FromBody] VisitaCreateDto dto)
         {
-            
             var visita = new VisitaMonumento
             {
                 MonumentoId = dto.MonumentoId,
                 UtilizadorId = dto.UtilizadorId,
                 NumeroVisitas = 1
             };
-            
-            // Verificar se já existe visita do mesmo utilizador para este monumento
+
+            // Verifica se o utilizador já registou visita no mesmo monumento
             var existing = await _context.VisitaMonumento
                 .FirstOrDefaultAsync(v => v.MonumentoId == visita.MonumentoId && v.UtilizadorId == visita.UtilizadorId);
 
@@ -90,7 +93,8 @@ namespace WebApplication1.Controllers.Api
             });
         }
 
-        // PUT: api/VisitaApi/5
+        // PUT: api/VisitaApi/{id}
+        /// Atualiza o número de visitas
         [HttpPut("{id}")]
         public async Task<IActionResult> PutVisita(int id, [FromBody] VisitaUpdateDto dto)
         {
@@ -99,14 +103,17 @@ namespace WebApplication1.Controllers.Api
             var visita = await _context.VisitaMonumento.FindAsync(id);
             if (visita == null) return NotFound();
 
+            // Garante que o número de visitas não fica abaixo de 1
             visita.NumeroVisitas = dto.NumeroVisitas < 1 ? 1 : dto.NumeroVisitas;
-            _context.Entry(visita).State = EntityState.Modified;
 
+            _context.Entry(visita).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+
             return NoContent();
         }
 
-        // DELETE: api/VisitaApi/5
+        // DELETE: api/VisitaApi/{id}
+        /// Remove uma visita
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteVisita(int id)
         {

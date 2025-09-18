@@ -4,6 +4,7 @@ using appMonumentos.Models;
 
 namespace WebApplication1.Data
 {
+    // Contexto principal da aplicação (inclui Identity e tabelas personalizadas)
     public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -11,6 +12,7 @@ namespace WebApplication1.Data
         {
         }
 
+        // DbSets correspondem a tabelas na BD
         public DbSet<Monumento> Monumento { get; set; } = default!;
         public DbSet<Utilizador> Utilizador { get; set; } = default!;
         public DbSet<Localidade> Localidade { get; set; } = default!;
@@ -23,7 +25,7 @@ namespace WebApplication1.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Index único para evitar duplicar a mesma visita > (MonumentoId, UtilizadorId)
+            // Criar índice único para evitar visitas duplicadas (mesmo utilizador no mesmo monumento)
             modelBuilder.Entity<VisitaMonumento>()
                 .HasIndex(v => new { v.MonumentoId, v.UtilizadorId })
                 .IsUnique();

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication1.Controllers.Api
 {
+    /// API responsável pela gestão de imagens (listar, consultar e apagar)
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
@@ -19,6 +20,7 @@ namespace WebApplication1.Controllers.Api
         }
 
         // GET: api/ImagemApi
+        /// Lista todas as imagens registadas
         [HttpGet]
         public async Task<ActionResult<IEnumerable<object>>> GetImagens()
         {
@@ -26,7 +28,7 @@ namespace WebApplication1.Controllers.Api
                 .Select(i => new
                 {
                     i.Id,
-                    Caminho = "/imagens/" + i.NomeImagem,
+                    Caminho = "/imagens/" + i.NomeImagem, // devolve o caminho completo
                     i.MonumentoId,
                     i.UtilizadorId,
                     i.IsPrincipal
@@ -37,6 +39,7 @@ namespace WebApplication1.Controllers.Api
         }
 
         // GET: api/ImagemApi/{id}
+        /// Retorna os detalhes de uma imagem específica
         [HttpGet("{id}")]
         public async Task<ActionResult<object>> GetImagem(int id)
         {
@@ -58,6 +61,7 @@ namespace WebApplication1.Controllers.Api
         }
 
         // DELETE: api/ImagemApi/{id}
+        /// Apaga uma imagem pelo ID
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteImagem(int id)
         {

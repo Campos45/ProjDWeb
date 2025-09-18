@@ -8,6 +8,7 @@ using appMonumentos.Models;
 
 namespace WebApplication1.Controllers
 {
+    /// Controlador MVC responsável pela gestão de localidades
     [Authorize]
     public class LocalidadeController : Controller
     {
@@ -18,39 +19,34 @@ namespace WebApplication1.Controllers
             _context = context;
         }
 
-        // GET: Localidade
+        /// GET: Lista todas as localidades
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            var localidades = await _context.Localidade
-                .Include(l => l.Utilizador)
-                .ToListAsync();
+            var localidades = await _context.Localidade.Include(l => l.Utilizador).ToListAsync();
             return View(localidades);
         }
 
-        // GET: Localidade/Details/5
+        /// GET: Detalhes de uma localidade
         [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
 
-            var localidade = await _context.Localidade
-                .Include(l => l.Utilizador)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
+            var localidade = await _context.Localidade.Include(l => l.Utilizador).FirstOrDefaultAsync(m => m.Id == id);
             if (localidade == null) return NotFound();
 
             return View(localidade);
         }
 
-        // GET: Localidade/Create
+        /// GET: Criar localidade
         [Authorize]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Localidade/Create
+        /// POST: Criar localidade
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -58,11 +54,6 @@ namespace WebApplication1.Controllers
         {
             if (!ModelState.IsValid) return View(localidade);
 
-            // Associamos o admin actual como criador (opcional)
-            /*var username = User.Identity?.Name;
-            var utilizador = await _context.Utilizador.FirstOrDefaultAsync(u => u.Username == username);
-            if (utilizador != null) localidade.UtilizadorId = utilizador.Id;*/
-            
             var utilizador = await GetOrCreateUtilizadorForCurrentIdentityAsync();
             if (utilizador == null)
             {
@@ -70,25 +61,19 @@ namespace WebApplication1.Controllers
                 return View(localidade);
             }
 
-            // Associar SEMPRE o criador
             localidade.UtilizadorId = utilizador.Id;
-
-            //_context.Add(localidade);
             _context.Localidade.Add(localidade);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Localidade/Edit/5
+        /// GET: Editar localidade
         [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
 
-            var localidade = await _context.Localidade
-                .Include(l => l.Utilizador)
-                .FirstOrDefaultAsync(l => l.Id == id);
-
+            var localidade = await _context.Localidade.Include(l => l.Utilizador).FirstOrDefaultAsync(l => l.Id == id);
             if (localidade == null) return NotFound();
 
             var username = User.Identity?.Name;
@@ -101,7 +86,7 @@ namespace WebApplication1.Controllers
             return View(localidade);
         }
 
-        // POST: Localidade/Edit/5
+        /// POST: Editar localidade
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -135,21 +120,19 @@ namespace WebApplication1.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Localidade/Delete/5
+        /// GET: Apagar localidade
         [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
 
-            var localidade = await _context.Localidade
-                .Include(l => l.Utilizador)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
+            var localidade = await _context.Localidade.Include(l => l.Utilizador).FirstOrDefaultAsync(m => m.Id == id);
             if (localidade == null) return NotFound();
+
             return View(localidade);
         }
 
-        // POST: Localidade/Delete/5
+        /// POST: Confirmar remoção da localidade
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -163,8 +146,8 @@ namespace WebApplication1.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
-        
-        // Helper para sincronizar Identity com tabela Utilizador
+
+        /// Helper: garante que o utilizador do Identity entra na tabela Utilizador
         private async Task<Utilizador?> GetOrCreateUtilizadorForCurrentIdentityAsync()
         {
             var username = User.Identity?.Name;

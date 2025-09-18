@@ -10,24 +10,21 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication1.Controllers.API
 {
-    // Indica que este controlador é usado para API REST
+    /// API responsável pela gestão de monumentos
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    // Define a rota base da API para este controlador: "api/MonumentoApi"
     [Route("api/[controller]")]
     public class MonumentoApiController : ControllerBase  
     {
-        //base de dados para acesso aos dados
         private readonly ApplicationDbContext _context;
 
-        // Construtor que recebe a base de dados
         public MonumentoApiController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/monumentos
-        // Método que retorna uma lista de todos os monumentos
+        // GET: api/MonumentoApi
+        /// Lista todos os monumentos
         [HttpGet]
         public async Task<ActionResult<IEnumerable<object>>> GetMonumentos()
         {
@@ -48,9 +45,8 @@ namespace WebApplication1.Controllers.API
             return Ok(monumentos);
         }
 
-        // GET: api/monumentos/5
-        // Método que obtém um monumento específico pelo seu ID
         // GET: api/MonumentoApi/{id}
+        /// Retorna um monumento específico
         [HttpGet("{id}")]
         public async Task<ActionResult<object>> GetMonumento(int id)
         {
@@ -69,17 +65,13 @@ namespace WebApplication1.Controllers.API
                 })
                 .FirstOrDefaultAsync();
 
-            if (monumento == null)
-            {
-                return NotFound();
-            }
+            if (monumento == null) return NotFound();
 
             return Ok(monumento);
         }
 
-
-        // POST: api/monumentos
-        // Método para adicionar um novo monumento
+        // POST: api/MonumentoApi
+        /// Cria um novo monumento
         [HttpPost]
         public async Task<ActionResult<MonumentoCreateDto>> PostMonumento([FromBody] MonumentoCreateDto dto)
         {
@@ -100,9 +92,8 @@ namespace WebApplication1.Controllers.API
             return CreatedAtAction(nameof(GetMonumento), new { id = monumento.Id }, dto);
         }
 
-
-        // PUT: api/monumentos/5
-        // Método para atualizar um monumento existente pelo seu ID
+        // PUT: api/MonumentoApi/{id}
+        /// Atualiza um monumento existente
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMonumento(int id, [FromBody] MonumentoUpdateDto dto)
         {
@@ -125,28 +116,17 @@ namespace WebApplication1.Controllers.API
             return NoContent();
         }
 
-
-        // DELETE: api/monumentos/5
-        // Método para apagar um monumento pelo seu ID
+        // DELETE: api/MonumentoApi/{id}
+        /// Apaga um monumento
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMonumento(int id)
         {
-            // Procura o monumento na base de dados pelo ID
             var monumento = await _context.Monumento.FindAsync(id);
+            if (monumento == null) return NotFound();
 
-            // Se não existir, retorna 404 Not Found
-            if (monumento == null)
-            {
-                return NotFound();
-            }
-
-            // Remove o monumento do contexto
             _context.Monumento.Remove(monumento);
-
-            // Aplica as alterações na base de dados
             await _context.SaveChangesAsync();
 
-            // Retorna resposta HTTP 204 No Content indicando que a operação foi bem-sucedida mas sem conteúdo a devolver
             return NoContent();
         }
     }

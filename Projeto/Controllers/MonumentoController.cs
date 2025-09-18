@@ -14,11 +14,12 @@ using appMonumentos.Models;
 
 namespace WebApplication1.Controllers
 {
+    /// Controlador responsável pela gestão dos monumentos no site
     [Authorize]
     public class MonumentoController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IWebHostEnvironment _env;
+        private readonly ApplicationDbContext _context; // Contexto da BD
+        private readonly IWebHostEnvironment _env;      // Ambiente web para manipular ficheiros
 
         public MonumentoController(ApplicationDbContext context, IWebHostEnvironment env)
         {
@@ -26,8 +27,7 @@ namespace WebApplication1.Controllers
             _env = env;
         }
 
-        // Helper: tenta obter o utilizador da tabela Utilizador baseado no Username do Identity.
-        // Se não existir, cria um registo mínimo (evita Forbid quando o Identity existe mas a tabela Utilizador não).
+        /// Helper: garante que o utilizador autenticado no Identity tem registo na tabela Utilizador.
         private async Task<Utilizador?> GetOrCreateUtilizadorForCurrentIdentityAsync()
         {
             var username = User.Identity?.Name;
@@ -36,7 +36,7 @@ namespace WebApplication1.Controllers
             var utilizador = await _context.Utilizador.FirstOrDefaultAsync(u => u.Username == username);
             if (utilizador != null) return utilizador;
 
-            // tenta tirar email do Identity
+            // Caso não exista, cria-se um utilizador mínimo
             var emailClaim = User.Claims.FirstOrDefault(c => c.Type == "email")?.Value
                              ?? User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
 
@@ -46,17 +46,16 @@ namespace WebApplication1.Controllers
                 Nome = username,
                 Email = emailClaim ?? $"{username}@dummy.local",
                 LocalidadeUtilizador = "N/D",
-                Password = "IdentityManaged" // <- valor dummy só para satisfazer NOT NULL
+                Password = "IdentityManaged" // valor fictício só para satisfazer restrição NOT NULL
             };
 
             _context.Utilizador.Add(utilizador);
             await _context.SaveChangesAsync();
-
             return utilizador;
         }
 
-
         // GET: Monumento
+        /// Mostra lista de todos os monumentos com imagens, localidades e visitas
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
@@ -71,6 +70,7 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Monumento/Details/5
+        /// Mostra detalhes de um monumento específico
         [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
@@ -88,16 +88,15 @@ namespace WebApplication1.Controllers
             return View(monumento);
         }
 
-        // GET: Monumento/Create
+        /// GET: Criar novo monumento
         public IActionResult Create()
         {
-            // Preenche dropdown de localidade
             ViewBag.LocalidadeId = new SelectList(_context.Localidade, "Id", "NomeLocalidade");
             ViewBag.CurrentUserName = User.Identity?.Name ?? "";
             return View();
         }
 
-        // POST: Monumento/Create
+        /// POST: Criar novo monumento
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Monumento monumento)
@@ -112,31 +111,17 @@ namespace WebApplication1.Controllers
             var utilizador = await GetOrCreateUtilizadorForCurrentIdentityAsync();
             if (utilizador != null) monumento.UtilizadorId = utilizador.Id;
 
-            // inicializa colecções para evitar null refs e para manter consistência
-            monumento.Imagens = monumento.Imagens ?? new List<Imagem>();
-            monumento.VisitasMonumento = monumento.VisitasMonumento ?? new List<VisitaMonumento>();
+            // Inicializa coleções para evitar null
+            monumento.Imagens ??= new List<Imagem>();
+            monumento.VisitasMonumento ??= new List<VisitaMonumento>();
 
             _context.Add(monumento);
             await _context.SaveChangesAsync();
-            
-            // criar imagem placeholder principal
-            /*if (!_context.Imagem.Any(i => i.MonumentoId == monumento.Id))
-            {
-                var placeholder = new Imagem
-                {
-                    NomeImagem = "placeholder.png", // mete um ficheiro cinzento em wwwroot/imagens
-                    MonumentoId = monumento.Id,
-                    UtilizadorId = monumento.UtilizadorId,
-                    IsPrincipal = true
-                };
-                _context.Imagem.Add(placeholder);
-                await _context.SaveChangesAsync();
-            }*/
-            
+
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Monumento/Edit/5
+        /// GET: Editar monumento
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -157,7 +142,7 @@ namespace WebApplication1.Controllers
             return View(monumento);
         }
 
-        // POST: Monumento/Edit/5
+        /// POST: Editar monumento
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Monumento monumento)
@@ -181,7 +166,7 @@ namespace WebApplication1.Controllers
 
             try
             {
-                //  garantir que não perdemos o dono original
+                // Mantém o dono original
                 monumento.UtilizadorId = original.UtilizadorId;
 
                 _context.Update(monumento);
@@ -197,9 +182,8 @@ namespace WebApplication1.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
-
-        // GET: Monumento/Delete/5
+        
+        /// GET: Apagar monumento
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -219,7 +203,7 @@ namespace WebApplication1.Controllers
             return View(monumento);
         }
 
-        // POST: Monumento/Delete/5
+        /// POST: Confirmar remoção do monumento
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -238,11 +222,14 @@ namespace WebApplication1.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: Monumento/UploadImagem
+        // ======================
+        // UPLOAD E GESTÃO DE IMAGENS
+        // ======================
+
+        /// POST: Upload de imagem de monumento
         [HttpPost]
         public async Task<IActionResult> UploadImagem(int monumentoId, IFormFile imagem)
         {
-            // Verifica o utilizador
             var utilizador = await GetOrCreateUtilizadorForCurrentIdentityAsync();
             if (utilizador == null) return Unauthorized();
 
@@ -256,7 +243,7 @@ namespace WebApplication1.Controllers
             var imagensFolder = Path.Combine(_env.WebRootPath ?? "wwwroot", "imagens");
             if (!Directory.Exists(imagensFolder)) Directory.CreateDirectory(imagensFolder);
 
-            // Gera um nome único para evitar conflitos
+            // Nome único para evitar conflitos
             var uniqueName = Guid.NewGuid().ToString() + Path.GetExtension(imagem.FileName);
             var fullPath = Path.Combine(imagensFolder, uniqueName);
 
@@ -265,7 +252,7 @@ namespace WebApplication1.Controllers
                 await imagem.CopyToAsync(stream);
             }
 
-            // Se não existir imagem principal, esta torna-se principal
+            // Se não houver principal, define esta como principal
             var isPrincipal = !_context.Imagem.Any(i => i.MonumentoId == monumentoId && i.IsPrincipal);
 
             var imagemDb = new Imagem
@@ -283,7 +270,7 @@ namespace WebApplication1.Controllers
             return RedirectToAction("Details", new { id = monumentoId });
         }
 
-        // POST: Monumento/DeleteImagem
+        /// POST: Remover imagem
         [HttpPost]
         public async Task<IActionResult> DeleteImagem(int id)
         {
@@ -296,7 +283,7 @@ namespace WebApplication1.Controllers
             if (!isAdmin && imagem.UtilizadorId != utilizador?.Id)
                 return Forbid();
 
-            // Apaga ficheiro físico (se existir)
+            // Remove ficheiro físico
             var imagensFolder = Path.Combine(_env.WebRootPath ?? "wwwroot", "imagens");
             var filePath = Path.Combine(imagensFolder, imagem.NomeImagem);
             if (System.IO.File.Exists(filePath)) System.IO.File.Delete(filePath);
@@ -311,7 +298,7 @@ namespace WebApplication1.Controllers
         // VISITAS
         // ======================
 
-        // Marcar presença (cria visita com NumeroVisitas = 1 se ainda não existir)
+        /// POST: Alterna a visita (adiciona ou remove)
         [HttpPost]
         public async Task<IActionResult> ToggleVisita(int id)
         {
@@ -323,13 +310,7 @@ namespace WebApplication1.Controllers
 
             if (visita == null)
             {
-                visita = new VisitaMonumento
-                {
-                    MonumentoId = id,
-                    UtilizadorId = utilizador.Id,
-                    NumeroVisitas = 1
-                };
-                _context.VisitaMonumento.Add(visita);
+                _context.VisitaMonumento.Add(new VisitaMonumento { MonumentoId = id, UtilizadorId = utilizador.Id, NumeroVisitas = 1 });
             }
             else
             {
@@ -340,6 +321,7 @@ namespace WebApplication1.Controllers
             return RedirectToAction("Details", new { id });
         }
 
+        /// Incrementa visitas
         [HttpPost]
         public async Task<IActionResult> IncrementarVisita(int id)
         {
@@ -351,12 +333,10 @@ namespace WebApplication1.Controllers
 
             if (visita == null)
             {
-                // Se não existe ainda, cria com 1 -> +1 = 2
                 visita = new VisitaMonumento { MonumentoId = id, UtilizadorId = utilizador.Id, NumeroVisitas = 1 };
                 _context.VisitaMonumento.Add(visita);
             }
 
-            // Garantir que NumeroVisitas não é null
             visita.NumeroVisitas = Math.Max(1, visita.NumeroVisitas);
             visita.NumeroVisitas++;
             _context.Update(visita);
@@ -365,6 +345,7 @@ namespace WebApplication1.Controllers
             return RedirectToAction("Details", new { id });
         }
 
+        /// Decrementa visitas
         [HttpPost]
         public async Task<IActionResult> DecrementarVisita(int id)
         {
