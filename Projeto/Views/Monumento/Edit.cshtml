@@ -44,10 +44,10 @@
                 <span asp-validation-for="Descricao" class="text-danger"></span>
             </div>
 
-            <!-- Mostrar dono (não editável) -->
+            <!-- Criador do Monumento (só leitura) -->
             <div class="form-group">
-                <label class="control-label">Dono do Monumento</label>
-                <input class="form-control" value="@ViewBag.DonoNome" disabled />
+                <label class="control-label">Criador do monumento</label>
+                <input type="text" value="@Model.Utilizador?.Nome" class="form-control" readonly />
             </div>
 
             <div class="form-group">

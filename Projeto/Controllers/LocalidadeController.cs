@@ -1,14 +1,14 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using appMonumentos.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication1.Controllers
 {
-    // Controlador responsável por gerir as localidades (CRUD)
+    [Authorize]
     public class LocalidadeController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -19,6 +19,7 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Localidade
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var localidades = await _context.Localidade
@@ -28,6 +29,7 @@ namespace WebApplication1.Controllers
         }
 
         // GET: Localidade/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
@@ -52,19 +54,27 @@ namespace WebApplication1.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create([Bind("Id,NomeLocalidade")] Localidade localidade)
+        public async Task<IActionResult> Create(Localidade localidade)
         {
             if (!ModelState.IsValid) return View(localidade);
 
-            var username = User.Identity?.Name;
-            var utilizador = await _context.Utilizador
-                .FirstOrDefaultAsync(u => u.Username == username);
+            // Associamos o admin actual como criador (opcional)
+            /*var username = User.Identity?.Name;
+            var utilizador = await _context.Utilizador.FirstOrDefaultAsync(u => u.Username == username);
+            if (utilizador != null) localidade.UtilizadorId = utilizador.Id;*/
+            
+            var utilizador = await GetOrCreateUtilizadorForCurrentIdentityAsync();
+            if (utilizador == null)
+            {
+                TempData["Erro"] = "Não foi possível identificar o utilizador autenticado.";
+                return View(localidade);
+            }
 
-            if (utilizador == null) return Unauthorized();
-
+            // Associar SEMPRE o criador
             localidade.UtilizadorId = utilizador.Id;
 
-            _context.Add(localidade);
+            //_context.Add(localidade);
+            _context.Localidade.Add(localidade);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -82,8 +92,7 @@ namespace WebApplication1.Controllers
             if (localidade == null) return NotFound();
 
             var username = User.Identity?.Name;
-            var utilizador = await _context.Utilizador
-                .FirstOrDefaultAsync(u => u.Username == username);
+            var utilizador = await _context.Utilizador.FirstOrDefaultAsync(u => u.Username == username);
             var isAdmin = User.IsInRole("Admin");
 
             if (!isAdmin && localidade.UtilizadorId != utilizador?.Id)
@@ -96,7 +105,7 @@ namespace WebApplication1.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NomeLocalidade")] Localidade localidadeEditada)
+        public async Task<IActionResult> Edit(int id, Localidade localidadeEditada)
         {
             if (!ModelState.IsValid) return View(localidadeEditada);
 
@@ -104,14 +113,12 @@ namespace WebApplication1.Controllers
             if (localidade == null) return NotFound();
 
             var username = User.Identity?.Name;
-            var utilizador = await _context.Utilizador
-                .FirstOrDefaultAsync(u => u.Username == username);
+            var utilizador = await _context.Utilizador.FirstOrDefaultAsync(u => u.Username == username);
             var isAdmin = User.IsInRole("Admin");
 
             if (!isAdmin && localidade.UtilizadorId != utilizador?.Id)
                 return Forbid();
 
-            // Só atualiza o NomeLocalidade
             localidade.NomeLocalidade = localidadeEditada.NomeLocalidade;
 
             try
@@ -122,7 +129,7 @@ namespace WebApplication1.Controllers
             catch (DbUpdateConcurrencyException)
             {
                 if (!LocalidadeExists(localidade.Id)) return NotFound();
-                else throw;
+                throw;
             }
 
             return RedirectToAction(nameof(Index));
@@ -139,15 +146,6 @@ namespace WebApplication1.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (localidade == null) return NotFound();
-
-            var username = User.Identity?.Name;
-            var utilizador = await _context.Utilizador
-                .FirstOrDefaultAsync(u => u.Username == username);
-            var isAdmin = User.IsInRole("Admin");
-
-            if (!isAdmin && localidade.UtilizadorId != utilizador?.Id)
-                return Forbid();
-
             return View(localidade);
         }
 
@@ -158,24 +156,41 @@ namespace WebApplication1.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var localidade = await _context.Localidade.FindAsync(id);
-            if (localidade == null) return NotFound();
-
-            var username = User.Identity?.Name;
-            var utilizador = await _context.Utilizador
-                .FirstOrDefaultAsync(u => u.Username == username);
-            var isAdmin = User.IsInRole("Admin");
-
-            if (!isAdmin && localidade.UtilizadorId != utilizador?.Id)
-                return Forbid();
-
-            _context.Localidade.Remove(localidade);
-            await _context.SaveChangesAsync();
+            if (localidade != null)
+            {
+                _context.Localidade.Remove(localidade);
+                await _context.SaveChangesAsync();
+            }
             return RedirectToAction(nameof(Index));
         }
-
-        private bool LocalidadeExists(int id)
+        
+        // Helper para sincronizar Identity com tabela Utilizador
+        private async Task<Utilizador?> GetOrCreateUtilizadorForCurrentIdentityAsync()
         {
-            return _context.Localidade.Any(e => e.Id == id);
+            var username = User.Identity?.Name;
+            if (string.IsNullOrEmpty(username)) return null;
+
+            var utilizador = await _context.Utilizador.FirstOrDefaultAsync(u => u.Username == username);
+            if (utilizador != null) return utilizador;
+
+            var emailClaim = User.Claims.FirstOrDefault(c => c.Type == "email")?.Value
+                             ?? User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
+
+            utilizador = new Utilizador
+            {
+                Username = username,
+                Nome = username,
+                Email = emailClaim ?? $"{username}@dummy.local",
+                LocalidadeUtilizador = "N/D",
+                Password = "IdentityManaged"
+            };
+
+            _context.Utilizador.Add(utilizador);
+            await _context.SaveChangesAsync();
+
+            return utilizador;
         }
+
+        private bool LocalidadeExists(int id) => _context.Localidade.Any(e => e.Id == id);
     }
 }

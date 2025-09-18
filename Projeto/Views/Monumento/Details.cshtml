@@ -15,21 +15,32 @@
 }
 
 <h2>@Model.Designacao</h2>
+<div class="mt-3">
+    <h4>Informações do Monumento</h4>
+    <p><strong>Criador:</strong> @Model.Utilizador?.Nome</p>
+    <p><strong>Época de Construção:</strong> @Model.EpocaConstrucao</p>
+    <p><strong>Endereço:</strong> @Model.Endereco</p>
+    <p><strong>Localidade:</strong> @Model.Localidade?.NomeLocalidade</p>
+    <p><strong>Descrição:</strong> @Model.Descricao</p>
+</div>
+<hr />
+
+
 <hr />
 
 <!-- VISITAS -->
 @if (userAuthenticated)
 {
-    @if (userVisit == null)
+    <form asp-action="ToggleVisita" method="post" style="display:inline;">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit" class="btn btn-primary">
+            @(userVisit == null ? "Marcar como visitado" : "Remover visita")
+        </button>
+    </form>
+
+    @if (userVisit != null)
     {
-        <form asp-action="MarcarVisita" method="post" style="display:inline;">
-            <input type="hidden" name="id" value="@Model.Id" />
-            <button type="submit" class="btn btn-primary">Marcar como visitado</button>
-        </form>
-    }
-    else
-    {
-        <p>As suas visitas: <strong>@userVisit.NumeroVisitas</strong></p>
+        <p class="mt-2">As suas visitas: <strong>@userVisit.NumeroVisitas</strong></p>
 
         <form asp-action="IncrementarVisita" method="post" style="display:inline;">
             <input type="hidden" name="id" value="@Model.Id" />
@@ -75,6 +86,7 @@ else
 
 <p>Total de visitas a este monumento: <strong>@(Model.VisitasMonumento?.Sum(v => v.NumeroVisitas) ?? 0)</strong></p>
 <hr />
+
 
 <!-- IMAGEM PRINCIPAL -->
 <div style="margin-bottom: 30px;">

@@ -34,7 +34,7 @@ namespace WebApplication1.Controllers.Api
                 .Select(i => new
                 {
                     i.Id,
-                    i.NomeImagem,
+                    Caminho= "/imagens/" + i.NomeImagem,
                     i.MonumentoId,
                     i.UtilizadorId,
                     i.IsPrincipal
@@ -54,7 +54,7 @@ namespace WebApplication1.Controllers.Api
                 .Select(i => new
                 {
                     i.Id,
-                    i.NomeImagem,
+                    Caminho= "/imagens/" + i.NomeImagem,
                     i.MonumentoId,
                     i.UtilizadorId,
                     i.IsPrincipal

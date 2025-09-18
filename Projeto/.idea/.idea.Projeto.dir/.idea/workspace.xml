@@ -9,21 +9,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14e42af0-b416-4e94-a6b6-58f49122598b" name="Changes" comment="localidades com permissoes a funcionar">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/dataSources/93116270-89ec-4e6e-8e9a-255ab0b14d54.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/dataSources/93116270-89ec-4e6e-8e9a-255ab0b14d54.xml" afterDir="false" />
+    <list default="true" id="14e42af0-b416-4e94-a6b6-58f49122598b" name="Changes" comment="Relaçao M-N e outras alteraçoes">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Projeto.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controllers/Api/ComentarioApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/ComentarioApiController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controllers/Api/UtilizadorApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/UtilizadorApiController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controllers/Api/VisitaApiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/Api/VisitaApiController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/LocalidadeController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/LocalidadeController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controllers/MonumentoController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/MonumentoController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controllers/UtilizadorController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/UtilizadorController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/DTO/ComentarioDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/DTO/ComentarioDTO.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/DTO/VisitaDTO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/DTO/VisitaDTO.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/VisitaMonumento.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/VisitaMonumento.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Projeto.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Views/Monumento/Create.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Monumento/Create.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Views/Monumento/Details.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Monumento/Details.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/Utilizador/Details.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Utilizador/Details.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/Monumento/Edit.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/Monumento/Edit.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/app.db" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -185,7 +179,7 @@
       <workItem from="1756992136848" duration="8648000" />
       <workItem from="1757083599905" duration="2347000" />
       <workItem from="1757514550902" duration="10925000" />
-      <workItem from="1757675730940" duration="40042000" />
+      <workItem from="1757675730940" duration="54706000" />
     </task>
     <task id="LOCAL-00001" summary="criar monumentos updated v2">
       <option name="closed" value="true" />
@@ -371,7 +365,15 @@
       <option name="project" value="LOCAL" />
       <updated>1757719889310</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Relaçao M-N e outras alteraçoes">
+      <option name="closed" value="true" />
+      <created>1758066844855</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1758066844855</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -444,6 +446,7 @@
     <MESSAGE value="APIs todas a funcionar" />
     <MESSAGE value="Alteraçoes nos controllers Monumento e Localidade =&gt; controlo de permissoes" />
     <MESSAGE value="localidades com permissoes a funcionar" />
-    <option name="LAST_COMMIT_MESSAGE" value="localidades com permissoes a funcionar" />
+    <MESSAGE value="Relaçao M-N e outras alteraçoes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Relaçao M-N e outras alteraçoes" />
   </component>
 </project>
